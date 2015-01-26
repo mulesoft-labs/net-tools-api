@@ -1,0 +1,76 @@
+#%RAML 0.8
+title: Net Tools
+version: 1.0
+baseUri: http://localhost:8081/api
+securedBy: [basic]  
+securitySchemes: 
+  - basic:
+      type: Basic Authentication
+
+/ping:
+  get:
+    description: Returns ping invocation over the host
+    queryParameters:
+      host:
+        description: The domain or ip of the host to ping
+        type: string
+    responses: 
+      200:
+        body: 
+          text/plain:
+            example: |
+              PING localhost (127.0.0.1): 56 data bytes
+              64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.050 ms
+              64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.070 ms
+              64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.054 ms
+              64 bytes from 127.0.0.1: icmp_seq=3 ttl=64 time=0.046 ms
+
+              --- localhost ping statistics ---
+              4 packets transmitted, 4 packets received, 0.0% packet loss
+              round-trip min/avg/max/stddev = 0.046/0.055/0.070/0.009 ms
+
+#/telnet:
+#  get:
+#    description: Returns telnet invocation over the host
+#    queryParameters:
+#      host:
+#        description: The domain or ip of the host to telnet
+#        type: string
+#      port:
+#        description: The port number of host to telnet
+#        type: number
+#    responses: 
+#      200:
+#        body: 
+#          text/plain:
+#            example: |
+#              s
+/socket:
+  get:
+    description: Creates a socket to test a connection
+    queryParameters:
+      host:
+        description: The domain or ip of the host to connect
+        type: string
+      port:
+        description: The port number of host to connect
+        type: number
+    responses: 
+      200:
+        body: 
+          text/plain:
+            example: |
+              s
+/traceroute:
+  get:
+    description: Returns traceroute invocation over the host
+    queryParameters:
+      host:
+        description: The domain or ip of the host to traceroute
+        type: string
+    responses: 
+      200:
+        body: 
+          text/plain:
+            example: |
+              s
