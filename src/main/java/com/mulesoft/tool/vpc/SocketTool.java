@@ -35,6 +35,6 @@ public class SocketTool implements Callable {
 			return b.toString();
 		}
 
-		return "Connection successfull";
+		return "Connection successful";
 	}
 }

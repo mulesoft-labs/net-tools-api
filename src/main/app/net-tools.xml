@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" 
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" 
 	xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" 
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" 
 	xmlns:http="http://www.mulesoft.org/schema/mule/http" 
@@ -12,7 +12,8 @@ http://www.mulesoft.org/schema/mule/spring-security http://www.mulesoft.org/sche
 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd" version="EE-3.6.0">
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd" >
 
     <mule-ss:security-manager>
         <mule-ss:delegate-security-provider name="memory-provider" delegate-ref="authenticationManager" />
@@ -29,11 +30,29 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     </spring:beans>
     
     <apikit:config name="net-tools-config" raml="net-tools.raml" consoleEnabled="true" consolePath="console" doc:name="Router" />
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
     <flow name="net-tools-main">
-        <http:inbound-endpoint address="http://localhost:8081/api" doc:name="HTTP" />
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/api/*" doc:name="HTTP"/>
         <mule-ss:http-security-filter realm="mule-realm"/>
-        <apikit:router config-ref="net-tools-config" doc:name="APIkit Router" />
+        <apikit:router config-ref="net-tools-config" doc:name="APIkit Router"/>
         <exception-strategy ref="vpcUtil-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy" />
+    </flow>
+    <flow name="bashboard">
+		<http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
+        <mule-ss:http-security-filter realm="mule-realm"/>
+        <parse-template location="dashboard.html" mimeType="text/html" doc:name="Parse Template"/>
+    </flow>
+    <flow name="jquery.min.js">
+		<http:listener config-ref="HTTP_Listener_Configuration" path="/js/jquery.min.js" doc:name="HTTP"/>
+        <parse-template location="jquery.min.js" doc:name="Parse Template"/>
+    </flow>
+    <flow name="toastr.min.js">
+		<http:listener config-ref="HTTP_Listener_Configuration" path="/js/toastr.min.js" doc:name="HTTP"/>
+        <parse-template location="toastr.min.js" doc:name="Parse Template"/>
+    </flow>
+    <flow name="toastr.min.css">
+		<http:listener config-ref="HTTP_Listener_Configuration" path="/css/toastr.min.css" doc:name="HTTP"/>
+        <parse-template location="toastr.min.css" doc:name="Parse Template"/>
     </flow>
     <flow name="get:/ping:net-tools-config">
         <component class="com.mulesoft.tool.vpc.Ping" doc:name="Java" />
@@ -47,31 +66,34 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     <flow name="get:/socket:net-tools-config">
         <component class="com.mulesoft.tool.vpc.SocketTool" doc:name="Socket" />
     </flow>
+    <flow name="get:/dns:net-tools-config">
+        <component class="com.mulesoft.tool.vpc.Dns" doc:name="Dns"/>
+    </flow>
     <apikit:mapping-exception-strategy name="vpcUtil-apiKitGlobalExceptionMapping">
         <apikit:mapping statusCode="404">
-            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
-            <set-property propertyName="Content-Type" value="application/json" doc:name="Property" />
-            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload" />
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException"/>
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload"/>
         </apikit:mapping>
         <apikit:mapping statusCode="405">
-            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
-            <set-property propertyName="Content-Type" value="application/json" doc:name="Property" />
-            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload" />
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException"/>
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload"/>
         </apikit:mapping>
         <apikit:mapping statusCode="415">
-            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
-            <set-property propertyName="Content-Type" value="application/json" doc:name="Property" />
-            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload" />
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException"/>
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload"/>
         </apikit:mapping>
         <apikit:mapping statusCode="406">
-            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
-            <set-property propertyName="Content-Type" value="application/json" doc:name="Property" />
-            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload" />
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException"/>
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload"/>
         </apikit:mapping>
         <apikit:mapping statusCode="400">
-            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
-            <set-property propertyName="Content-Type" value="application/json" doc:name="Property" />
-            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload" />
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException"/>
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
         </apikit:mapping>
     </apikit:mapping-exception-strategy>
 
