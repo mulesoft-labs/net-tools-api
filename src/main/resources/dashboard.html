@@ -112,8 +112,10 @@ table {
                     <option value="traceroute">Traceroute</option>
                     <option value="socket">Socket</option>
                     <option value="dns">DNS</option>
+                    <option value="curl">curl</option>
                 </select>
                 <input name="ip" type="text" title="IP" id="ip" />
+                <input name="path" type="text" title="PATH" id="path" />
                 <input name="port" type="text" title="PORT" id="port" />
                 <button type="button" id="check">check</button>
 			</form>
@@ -143,7 +145,8 @@ table {
                 $("#check").click(function() {
                     var operation = $("#operation").val();
                     var ip = $("#ip").val();
-                    var port = (operation === 'socket') ? $("#port").val() : '';
+                    var path = (operation === 'curl') ? $("#path").val() : '';
+                    var port = (operation === 'socket') | (operation === 'curl') ? $("#port").val() : '';
                     if (!ip) {
                         toastr["error"]("Missing IP", "Invalid Arguments")
                         console.error("Missing IP!");
@@ -154,16 +157,25 @@ table {
                         console.error('Missing port!');
                         return;
                     }
+                    if (operation === 'curl' && !path) {
+                        toastr["error"]("Missing path", "Invalid Arguments")
+                        console.error('Missing path!');
+                        return;
+                    }
                     var apiurl = '/api/' + operation + '?host=' + ip;
                     if (operation === 'socket') {
                         apiurl += '&port=' + port;
                     }
-                    console.log(operation + " " + ip + " " + port);
+                    if (operation === 'curl') {
+                        apiurl += '&path=' + path;
+                        apiurl += '&port=' + port;
+                    }
+                    console.log(operation + " " + ip + " " + path + " " + port);
                     $.ajax({
                         url: apiurl
                     })
                     .done(function(result) {
-                        $("#output").append('<pre class="command">&gt; ' + operation + ' ' + ip + ' ' + port + '</pre>');
+                        $("#output").append('<pre class="command">&gt; ' + operation + ' ' + ip + ' ' + path + ' ' + port + '</pre>');
                         $("#output").append('<pre class="output">' + result + '</pre>');
                     })
                     .fail(function() {

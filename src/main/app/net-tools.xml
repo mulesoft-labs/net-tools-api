@@ -15,7 +15,7 @@ http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/a
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd" >
 
-    <mule-ss:security-manager>
+    <mule-ss:security-manager doc:name="Spring Security Provider" name="SpringSecurityProvider">
         <mule-ss:delegate-security-provider name="memory-provider" delegate-ref="authenticationManager" />
     </mule-ss:security-manager>
  
@@ -30,14 +30,14 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     </spring:beans>
     
     <apikit:config name="net-tools-config" raml="net-tools.raml" consoleEnabled="true" consolePath="console" doc:name="Router" />
-    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="${http.port}" doc:name="HTTP Listener Configuration"/>
     <flow name="net-tools-main">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/*" doc:name="HTTP"/>
         <mule-ss:http-security-filter realm="mule-realm"/>
         <apikit:router config-ref="net-tools-config" doc:name="APIkit Router"/>
         <exception-strategy ref="vpcUtil-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy" />
     </flow>
-    <flow name="bashboard">
+    <flow name="dashboard">
 		<http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
         <mule-ss:http-security-filter realm="mule-realm"/>
         <parse-template location="dashboard.html" mimeType="text/html" doc:name="Parse Template"/>
@@ -69,6 +69,9 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     <flow name="get:/dns:net-tools-config">
         <component class="com.mulesoft.tool.vpc.Dns" doc:name="Dns"/>
     </flow>
+    <flow name="get:/curl:net-tools-config">
+        <component class="com.mulesoft.tool.vpc.Curl" doc:name="Curl"/>
+    </flow>    
     <apikit:mapping-exception-strategy name="vpcUtil-apiKitGlobalExceptionMapping">
         <apikit:mapping statusCode="404">
             <apikit:exception value="org.mule.module.apikit.exception.NotFoundException"/>

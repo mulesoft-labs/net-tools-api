@@ -107,3 +107,22 @@ securitySchemes:
                9  216.239.50.189  1.963 ms 216.239.54.205  2.139 ms 216.239.49.9  1.962 ms
                10  216.239.58.213  2.424 ms 64.233.174.43  2.246 ms 216.239.58.215  1.577 ms
                11  8.8.8.8  1.824 ms  1.383 ms  1.339 ms
+/curl:
+  get:
+    description: Runs a curl from the Mule host to the specified resource (ip, path, port) 
+    queryParameters:
+      host:
+        description: The domain or ip of the host to traceroute
+        type: string
+      path:
+        description: The path of the resource to be fetched
+        type: string
+      port:
+        description: The port number of host to be tested
+        type: number        
+    responses: 
+      200:
+        body: 
+          text/plain:
+            example: |
+              curl: (7) Failed to connect to 10.200.27.15 port 443: Timed out             

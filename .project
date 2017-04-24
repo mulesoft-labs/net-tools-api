@@ -1,23 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>net-tools</name>
-	<comment></comment>
-	<projects>
-	</projects>
-	<buildSpec>
-		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>org.mule.tooling.core.muleBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-	</buildSpec>
-	<natures>
-		<nature>org.mule.tooling.core.muleNature</nature>
-		<nature>org.eclipse.jdt.core.javanature</nature>
-	</natures>
+  <name>net-tools</name>
+  <comment/>
+  <projects/>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+    <buildCommand>
+      <name>org.mule.tooling.core.muleBuilder</name>
+    </buildCommand>
+    <buildCommand>
+      <name>org.mule.tooling.maven.mavenBuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.mule.tooling.maven.mavenNature</nature>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+    <nature>org.mule.tooling.core.muleNature</nature>
+  </natures>
 </projectDescription>
