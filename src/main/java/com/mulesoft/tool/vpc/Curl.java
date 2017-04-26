@@ -32,7 +32,11 @@ public class Curl implements Callable {
 			String url = "";
 			url = url.concat(host.concat(":").concat(port).concat("/").concat(path));
 			LOG.debug("curl URL: " + url);
-			ProcessBuilder pb = new ProcessBuilder("curl", "-i", "-L", "-k","--cert-status", url);
+			//-i include protocol headers
+			//-L follow redirects
+			//-k insecure
+			//-E cert status
+			ProcessBuilder pb = new ProcessBuilder("curl","-k", "-E", "-i","-L", url);
 			Process p = pb.start();
 			SequenceInputStream s = new SequenceInputStream(p.getInputStream(), p.getErrorStream());		
 			return s;
