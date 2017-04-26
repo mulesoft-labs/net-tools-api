@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+    <Appenders>
+        <RollingFile name="file" fileName="${sys:mule.home}${sys:file.separator}logs${sys:file.separator}loans.log" 
+                 filePattern="${sys:mule.home}${sys:file.separator}logs${sys:file.separator}net-tools-%i.log">
+            <PatternLayout pattern="%d [%t] %-5p %c - %m%n" />
+            <SizeBasedTriggeringPolicy size="10 MB" />
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <!-- CXF is used heavily by Mule for web services -->
+        <AsyncLogger name="org.apache.cxf" level="WARN"/>
+
+        <AsyncLogger name="au.com.pepper" level="ERROR"/>
+
+        <!-- Salesforce web services -->
+        <AsyncLogger name="org.mule.modules.salesforce" level="ERROR"/>
+        <AsyncLogger name="com.sforce" level="ERROR"/>
+        
+        <!-- Splitter logger to ERROR -->
+        <AsyncLogger name="org.mule.routing.Foreach$CollectionMapSplitter" level="ERROR"/>
+        <AsyncLogger name="org.mule.routing.ExpressionSplitter" level="ERROR"/>
+        
+        <!-- Apache Commons tend to make a lot of noise which can clutter the log-->
+        <AsyncLogger name="org.apache" level="WARN"/>
+
+        <!-- Reduce startup noise -->
+        <AsyncLogger name="org.springframework.beans.factory" level="WARN"/>
+
+        <!-- Mule classes -->
+        <AsyncLogger name="org.mule" level="DEBUG"/>
+        <AsyncLogger name="com.mulesoft" level="DEBUG"/>
+
+        <!-- Reduce DM verbosity -->
+        <AsyncLogger name="org.jetel" level="WARN"/>
+        <AsyncLogger name="Tracking" level="WARN"/>
+        
+        
+        <AsyncRoot level="DEBUG">
+            <AppenderRef ref="file" />
+        </AsyncRoot>
+        
+    </Loggers>
+</Configuration>

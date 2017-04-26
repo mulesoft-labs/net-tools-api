@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 import org.mule.api.MuleEventContext;
 import org.mule.api.lifecycle.Callable;
 import org.mule.api.transport.PropertyScope;
@@ -14,6 +16,8 @@ import org.mule.api.transport.PropertyScope;
 
 
 public class Curl implements Callable {
+	
+	private static final Logger LOG = Logger.getLogger(Curl.class);
 
 	@Override
 	public Object onCall(MuleEventContext eventContext) throws Exception {
@@ -26,7 +30,8 @@ public class Curl implements Callable {
 	public InputStream call(String host, String path, String port) throws IOException {
 		
 			String url = "";
-			url = url.concat(host.concat("/").concat(path).concat(":").concat(port));			
+			url = url.concat(host.concat(":").concat(port).concat("/").concat(path));
+			LOG.debug("curl URL: " + url);
 			ProcessBuilder pb = new ProcessBuilder("curl", "-i", "-L", "-k","--cert-status", url);
 			Process p = pb.start();
 			SequenceInputStream s = new SequenceInputStream(p.getInputStream(), p.getErrorStream());		
