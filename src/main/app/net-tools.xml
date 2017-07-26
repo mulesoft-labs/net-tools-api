@@ -33,27 +33,27 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="${http.port}" doc:name="HTTP Listener Configuration"/>
     <flow name="net-tools-main">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/api/*" doc:name="HTTP"/>
-        <mule-ss:http-security-filter realm="mule-realm"/>
+        <mule-ss:http-security-filter realm="mule-realm" doc:name="Security filter"/>
         <apikit:router config-ref="net-tools-config" doc:name="APIkit Router"/>
         <exception-strategy ref="vpcUtil-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy" />
     </flow>
     <flow name="dashboard">
-		<http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
-        <mule-ss:http-security-filter realm="mule-realm"/>
-        <parse-template location="dashboard.html" mimeType="text/html" doc:name="Parse Template"/>
+		<http:listener config-ref="HTTP_Listener_Configuration" path="/*" doc:name="HTTP"/>
+        <mule-ss:http-security-filter realm="mule-realm" doc:name="Security filter"/>
+        <http:static-resource-handler resourceBase="${app.home}/classes/web" defaultFile="index.html" doc:name="HTTP Static Resource Handler"/>
     </flow>
-    <flow name="jquery.min.js">
-		<http:listener config-ref="HTTP_Listener_Configuration" path="/js/jquery.min.js" doc:name="HTTP"/>
-        <parse-template location="jquery.min.js" doc:name="Parse Template"/>
-    </flow>
-    <flow name="toastr.min.js">
-		<http:listener config-ref="HTTP_Listener_Configuration" path="/js/toastr.min.js" doc:name="HTTP"/>
-        <parse-template location="toastr.min.js" doc:name="Parse Template"/>
-    </flow>
-    <flow name="toastr.min.css">
-		<http:listener config-ref="HTTP_Listener_Configuration" path="/css/toastr.min.css" doc:name="HTTP"/>
-        <parse-template location="toastr.min.css" doc:name="Parse Template"/>
-    </flow>
+<!--     <flow name="jquery.min.js"> -->
+<!-- 		<http:listener config-ref="HTTP_Listener_Configuration" path="/js/jquery.min.js" doc:name="HTTP"/> -->
+<!--         <parse-template location="jquery.min.js" doc:name="Parse Template"/> -->
+<!--     </flow> -->
+<!--     <flow name="toastr.min.js"> -->
+<!-- 		<http:listener config-ref="HTTP_Listener_Configuration" path="/js/toastr.min.js" doc:name="HTTP"/> -->
+<!--         <parse-template location="toastr.min.js" doc:name="Parse Template"/> -->
+<!--     </flow> -->
+<!--     <flow name="toastr.min.css"> -->
+<!-- 		<http:listener config-ref="HTTP_Listener_Configuration" path="/css/toastr.min.css" doc:name="HTTP"/> -->
+<!--         <parse-template location="toastr.min.css" doc:name="Parse Template"/> -->
+<!--     </flow> -->
     <flow name="get:/ping:net-tools-config">
         <component class="com.mulesoft.tool.vpc.Ping" doc:name="Java" />
     </flow>

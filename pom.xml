@@ -12,7 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<mule.version>3.8.3</mule.version>
+		<mule.version>3.8.4</mule.version>
     	<mule.tools.version>1.2</mule.tools.version>
 	</properties>
 
@@ -129,7 +129,13 @@
             <artifactId>mule-module-apikit</artifactId>
             <version>${mule.version}</version>
             <scope>provided</scope>
-        </dependency>       
+        </dependency> 
+        
+		<dependency>
+		    <groupId>commons-net</groupId>
+		    <artifactId>commons-net</artifactId>
+		    <version>3.5</version>
+		</dependency>      
     </dependencies>
 
 	<repositories>
