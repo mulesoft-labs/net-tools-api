@@ -8,5 +8,4 @@
   <classpathentry kind="output" path="target/classes"/>
   <classpathentry kind="con" path="MULE_RUNTIME"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-  <classpathentry kind="var" path="M2_REPO/commons-net/commons-net/3.5/commons-net-3.5.jar"/>
 </classpath>
