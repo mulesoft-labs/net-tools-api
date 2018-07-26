@@ -239,7 +239,7 @@ input:disabled {
                         console.error('Missing path!');
                         return;
                     }
-                    var apiurl = '/api/' + operation + '?host=' + ip;
+                    var apiurl = 'api/' + operation + '?host=' + ip;
                     if (operation === 'socket') {
                         apiurl += '&port=' + port;
                     }
