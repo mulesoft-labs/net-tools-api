@@ -1,11 +1,10 @@
-#%RAML 0.8
+#%RAML 1.0
 title: Network connectivity tools
-version: 1.0
-baseUri: http://localhost:8081/api
-securedBy: [basic]  
-securitySchemes: 
-  - basic:
-      type: Basic Authentication
+version: 2.0
+securedBy: [basic]
+securitySchemes:
+  basic:
+    type: Basic Authentication
 
 /ping:
   get:
@@ -29,22 +28,6 @@ securitySchemes:
               4 packets transmitted, 4 packets received, 0.0% packet loss
               round-trip min/avg/max/stddev = 0.046/0.055/0.070/0.009 ms
 
-#/telnet:
-#  get:
-#    description: Returns telnet invocation over the host
-#    queryParameters:
-#      host:
-#        description: The domain or ip of the host to telnet
-#        type: string
-#      port:
-#        description: The port number of host to telnet
-#        type: number
-#    responses: 
-#      200:
-#        body: 
-#          text/plain:
-#            example: |
-#              s
 /socket:
   get:
     description: Creates a TCP socket to test connectivity to an IP:Port combination
@@ -96,17 +79,7 @@ securitySchemes:
         body: 
           text/plain:
             example: |
-               1  216.182.237.132  1.203 ms 216.182.237.128  1.185 ms 216.182.237.132  1.681 ms
-               2  100.64.1.13  1.671 ms 100.64.1.235  1.337 ms 100.64.1.205  1.649 ms
-               3  100.64.0.184  469.084 ms 100.64.0.210  992.624 ms 100.64.0.216  1012.502 ms
-               4  100.64.16.43  0.777 ms 100.64.16.47  0.940 ms 100.64.16.91  0.904 ms
-               5  72.21.222.221  1.588 ms 72.21.222.223  1.561 ms 72.21.222.221  1.581 ms
-               6  54.240.242.42  12.569 ms 54.240.243.142  3.572 ms 54.240.242.102  18.003 ms
-               7  54.240.243.93  1.225 ms 54.240.242.13  1.249 ms  1.244 ms
-               8  52.95.216.113  1.092 ms  0.878 ms  0.972 ms
-               9  216.239.50.189  1.963 ms 216.239.54.205  2.139 ms 216.239.49.9  1.962 ms
-               10  216.239.58.213  2.424 ms 64.233.174.43  2.246 ms 216.239.58.215  1.577 ms
-               11  8.8.8.8  1.824 ms  1.383 ms  1.339 ms
+               127.0.0.1
 /curl:
   get:
     description: Runs a curl from the Mule host to the specified resource (ip, path, port) 

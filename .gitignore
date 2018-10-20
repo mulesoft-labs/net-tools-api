@@ -16,3 +16,5 @@ src/motorists-poc/target
 .studio
 .settings
 target
+.classpath
+.project
