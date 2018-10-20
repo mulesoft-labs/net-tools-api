@@ -15,7 +15,7 @@
   <ss:authentication-manager alias="authenticationManager">
     <ss:authentication-provider>
       <ss:user-service id="userService">
-        <ss:user name="admin" password="admin" authorities="ROLE_ADMIN" />
+        <ss:user name="${user:vpc-tools}" password="${pass:SomePass}" authorities="ROLE_ADMIN" />
       </ss:user-service>
     </ss:authentication-provider>
   </ss:authentication-manager>
