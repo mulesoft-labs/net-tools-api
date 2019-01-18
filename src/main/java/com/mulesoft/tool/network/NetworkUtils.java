@@ -38,20 +38,31 @@ public class NetworkUtils {
 	}
 
 	public static String testConnect(String host, String port) {
+		long startTime = System.nanoTime();
+		long totalTime = System.nanoTime();
 		try {
 			Socket socket = new Socket();
+			startTime = System.nanoTime();
 			socket.connect(new InetSocketAddress(host, Integer.parseInt(port)), 10000);
 			socket.setSoTimeout(10000);
 			if (socket.isConnected()) {
+				totalTime = System.nanoTime() - startTime;
 				socket.getInputStream();
 			}
 			socket.close();
-		} catch (Exception e) {
+		} 
+		catch (java.net.UnknownHostException e) {
+			return "Could not resolve host " + host;
+		}
+		catch (java.net.SocketTimeoutException e) {
+			return "Timeout while trying to connect to " + host;
+		}
+		catch (Exception e) {
 			ByteArrayOutputStream b = new ByteArrayOutputStream();
 			e.printStackTrace(new PrintStream(b));
 			return b.toString();
 		}
-		return "Connection successful";
+		return "Connection successful, RTT=" + Long.toString(totalTime/1000000) + "ms";
 	}
 
 	public static String traceRoute(String host) throws Exception {
