@@ -4,10 +4,10 @@
 
 	<groupId>com.mycompany</groupId>
 	<artifactId>net-tools-api</artifactId>
-	<version>2.0.0</version>
+	<version>2.2.0</version>
 	<packaging>mule-application</packaging>
 
-	<name>net-tools-v2.2.0</name>
+	<name>net-tools-api</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
