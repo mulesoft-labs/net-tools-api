@@ -4,7 +4,7 @@ The Net-Tools-Api app is a deployable Mule app that you can deploy to CloudHub. 
 
 ## Last build
 
-Last build can be found here: https://github.com/mulesoft-labs/net-tools-api/releases/
+Last build can be found here: https://github.com/mulesoft-labs/net-tools-api/releases
 
 ## Usage
 
