@@ -143,6 +143,7 @@ input:disabled {
                     <option value="socket">Socket</option>
                     <option value="dns">DNS</option>
                     <option value="curl">curl</option>
+                    <option value="ssltest">ssl</option>
                 </select>
                 <input name="ip" placeholder="IP Address or Host" type="text" title="IP" id="ip" />
                 <input name="port" placeholder="Port" type="text" title="PORT" id="port" />
@@ -202,6 +203,10 @@ input:disabled {
                         $("#path").attr("disabled", true);
                         $("#socketHelp").show();
                         break;
+                      case "ssltest":
+                        $("#path").attr("disabled", true);
+                        $("#socketHelp").show();
+                        break;
                       case "dns":
                         $("#path").attr("disabled", true);
                         $("#port").attr("disabled", true);
@@ -223,13 +228,13 @@ input:disabled {
                     var operation = $("#operation").val();
                     var ip = $("#ip").val();
                     var path = (operation === 'curl') ? $("#path").val() : '';
-                    var port = (operation === 'socket') | (operation === 'curl') ? $("#port").val() : '';
+                    var port = (operation === 'socket') | (operation === 'curl') | (operation === 'ssltest') ? $("#port").val() : '';
                     if (!ip) {
                         toastr["error"]("Missing IP", "Invalid Arguments")
                         console.error("Missing IP!");
                         return;
                     }
-                    if (operation === 'socket' && !port) {
+                    if ((operation === 'socket' || operation === 'ssltest') && !port) {
                         toastr["error"]("Missing port", "Invalid Arguments")
                         console.error('Missing port!');
                         return;
@@ -240,7 +245,7 @@ input:disabled {
                         return;
                     }
                     var apiurl = 'api/' + operation + '?host=' + ip;
-                    if (operation === 'socket') {
+                    if (operation === 'socket' || operation === 'ssltest') {
                         apiurl += '&port=' + port;
                     }
                     if (operation === 'curl') {
