@@ -202,7 +202,18 @@ NetworkUtils::testConnect(attributes.queryParams.host, attributes.queryParams.po
             </ee:message>
         </ee:transform>
     </flow>
-    <flow name="get:\traceroute:net-tools-config">
+    <flow name="get:\ssltest\net-tools-config" doc:id="8e725dad-59c4-4713-9771-91a850e9ce9d" >
+		<ee:transform doc:name="Transform Message" doc:id="70af9c23-b034-40fc-ab42-7781c55b85e3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+import java!com::mulesoft::tool::network::NetworkUtils
+---
+NetworkUtils::ssltest(attributes.queryParams.host, attributes.queryParams.port)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="get:\traceroute:net-tools-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="a006967e-8161-45f9-af3b-d1f3386ae267">
