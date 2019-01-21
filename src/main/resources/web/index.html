@@ -131,36 +131,36 @@
         <script src="js/jquery.min.js" type="text/javascript"></script>
         <script src="js/toastr.min.js" type="text/javascript"></script>
         <link href="css/toastr.min.css" rel="stylesheet" />
-    </head>
-    <body>
-        <div class="content">
-            <div class="header"><h1>Network connectivity tools</h1></div>
-            <form id="theForm" action="#">
-                <div>
-                    <select name="operation" id="operation">
-                        <option value="ping" selected>Ping</option>
-                        <option value="traceroute">Traceroute</option>
-                        <option value="socket">Socket</option>
-                        <option value="dns">DNS</option>
-                        <option value="curl">curl</option>
-                        <option value="lb">App LB accessibility</option>
-                    </select>
-                    <input name="ip" placeholder="Server FQDN or IP" type="text" title="IP" id="ip" />
-                    <input name="app" placeholder="myapp.us-e1.cloudhub.io" type="text" title="APP" id="app" />
-                    <input name="port" placeholder="Port" type="text" title="PORT" id="port" />
-                    <input name="url" placeholder="http://host:port/path/" type="text" title="URL" id="url" />
-                    <button type="button" id="check">Run</button>
-                    <button type="button" id="clean">Clean Console</button>
-                </div>
-            </form>
-            <div>
-                <div class="helpBox" id="pingHelp">Set an IP Address or Hostname and hit Run. <br/>Note: Ping works using ICMP protocol. If it has been disabled, the ping will not receive any response.</div>
-                <div class="helpBox" id="tracerouteHelp" style="display: none;">Set an IP Address or Hostname and hit Run</div>	
-                <div class="helpBox" id="socketHelp" style="display: none;">This performs a TCP connection. Set an IP Address or Hostname, the Port and hit Run</div>	
-                <div class="helpBox" id="dnsHelp" style="display: none;">Set a Hostname and hit Run</div>	
-                <div class="helpBox" id="curlHelp" style="display: none;">Set a URL and hit Run</div>	
-                <div class="helpBox" id="lbHelp" style="display: none;">Set the url of an application (appname.region.cloudhub.io) and hit Run</div>
-            </div>
+	</head>
+	<body>
+		<div class="content">
+			<div class="header"><h1>Network connectivity tools</h1></div>
+			<form id="theForm" action="#">
+          	  <div>
+                <select name="operation" id="operation">
+                    <option value="ping" selected>Ping</option>
+                    <option value="traceroute">Traceroute</option>
+                    <option value="socket">Socket</option>
+                    <option value="dns">DNS</option>
+                    <option value="curl">curl</option>
+                    <option value="certest">certificates</option>
+                    <option value="ciphertest">ssl ciphers</option>
+                </select>
+                <input name="ip" placeholder="IP Address or Host" type="text" title="IP" id="ip" />
+                <input name="port" placeholder="Port" type="text" title="PORT" id="port" />
+                <input name="url" placeholder="http://host:port/path/" type="text" title="URL" id="url" />
+                <input name="dnsServer" placeholder="dns server" type="text" title="DNS SERVER" id="dnsServer" />
+                <button type="button" id="check">Run</button>
+                <button type="button" id="clean">Clean Console</button>
+              </div>
+			</form>
+			<div>
+              <div class="helpBox" id="pingHelp">Set an IP Address or Hostname and hit Run. <br/>Note: Ping works using ICMP protocol. If it has been disabled, the ping will not receive any response.</div>
+			  <div class="helpBox" id="tracerouteHelp" style="display: none;">Set an IP Address or Hostname and hit Run</div>	
+              <div class="helpBox" id="socketHelp" style="display: none;">Set an IP Address or Hostname, the Port and hit Run</div>	
+			  <div class="helpBox" id="dnsHelp" style="display: none;">Set a Hostname and hit Run</div>	
+			  <div class="helpBox" id="curlHelp" style="display: none;">Set an IP Address or Schema (http-https://) plus Hostname, the Port, the Path and hit Run</div>	
+			</div>
             <pre id="output">
             </pre>
         </div>
@@ -204,17 +204,23 @@
                         $("#port").show();
                         $("#socketHelp").show();
                         break;
+                      case "certest":
+                        $("#ip").show();
+                        $("#port").show();
+                        $("#socketHelp").show();
+                        break;
+                      case "ciphertest":
+                        $("#ip").show();
+                        $("#port").show();
+                        $("#socketHelp").show();
+                        break;
                       case "dns":
                         $("#ip").show();
                         $("#dnsHelp").show();
                         break;
                       case "curl":
                         $("#url").show();
-	                    $("#curlHelp").show();
-                        break;
-                      case "lb":
-                        $("#app").show();
-  	                    $("#lbHelp").show();
+                        $("#curlHelp").show();
                         break;
                     default:
 
@@ -228,37 +234,40 @@
                 $("#check").click(function() {
                     var operation = $("#operation").val();
                     var ip = $("#ip").val();
-                    var path = (operation === 'curl') ? $("#path").val() : '';
-                    var port = (operation === 'socket') | (operation === 'curl') ? $("#port").val() : '';
-                    if (!ip) {
+                    var url = (operation === 'curl') ? $("#url").val() : '';
+                    var port = (operation === 'socket' || operation === 'certest' || operation === 'ciphertest') ? $("#port").val() : '';
+                    var dnsServer = (operation === 'dns') ? $("#dnsServer").val() : '';                    
+                    if (operation !== 'curl' && !ip) {
                         toastr["error"]("Missing IP", "Invalid Arguments")
                         console.error("Missing IP!");
                         return;
                     }
-                    if (operation === 'socket' && !port) {
+                    if ((operation === 'socket' || operation === 'certest' || operation === 'ciphertest') && !port) {
                         toastr["error"]("Missing port", "Invalid Arguments")
                         console.error('Missing port!');
                         return;
                     }
-                    if (operation === 'curl' && !path) {
-                        toastr["error"]("Missing path", "Invalid Arguments")
-                        console.error('Missing path!');
+                    if (operation === 'curl' && !url) {
+                        toastr["error"]("Missing url", "Invalid Arguments")
+                        console.error('Missing url!');
                         return;
                     }
                     var apiurl = 'api/' + operation + '?host=' + ip;
-                    if (operation === 'socket') {
+                    if (operation === 'socket' || operation === 'certest' || operation === 'ciphertest') {
                         apiurl += '&port=' + port;
+                    }
+                    if (operation === 'dns') {
+                        apiurl += '&dnsServer=' + dnsServer;
                     }
                     if (operation === 'curl') {
-                        apiurl += '&path=' + path;
-                        apiurl += '&port=' + port;
+                        apiurl += '&url=' + encodeURI(url);
                     }
-                    console.log(operation + " " + ip + " " + port + " " + path );
+                    console.log(operation + " " + ip + " " + port + " " + url );
                     $.ajax({
                         url: apiurl
                     })
                     .done(function(result) {
-                        $("#output").append('<pre class="command">&gt; ' + operation + ' ' + ip + ' ' + port + ' ' + path + '</pre>');
+                        $("#output").append('<pre class="command">&gt; ' + operation + ' ' + ip + ' ' + port + ' ' + url + '</pre>');
                         if (operation === 'curl') {
                         	$("#output").append('<textarea class="output">' + result + '</textarea>');
                         } else {
