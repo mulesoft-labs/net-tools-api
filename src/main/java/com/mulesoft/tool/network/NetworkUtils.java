@@ -80,14 +80,6 @@ public class NetworkUtils {
 	}
 
 	public static String ssltest(String host, String port) throws Exception {
-/* 		Got stuck trying to use OpenSSL to fetch the certs. The first way it works, 
-		but the connection is kept opened and except to send to data to the remote server; 
-		so I tried to add "| echo" to emulate a return keypress, but I'm not able to run openssl that way.
-		Leavig it all here in case someone can fix it.
-
-		return execute(new ProcessBuilder("openssl", "s_client", "-showcerts", "-servername", host, "-connect", host+":"+port, "| echo"));
-		return execute(new ProcessBuilder("/bin/sh", "openssl s_client -showcerts -servername "+host+" -connect "+host+":"+port+ " | echo")); */
-
 		Certificate[] certs;
 		String result;
 		SSLSession mySSLSession;
