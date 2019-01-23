@@ -9,8 +9,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import javax.net.ssl.*;
-import java.security.cert.*;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.BufferedWriter;
 
 public class NetworkUtils {
 
@@ -42,7 +43,7 @@ public class NetworkUtils {
 		long startTime = System.nanoTime();
 		long totalTime = System.nanoTime();
 		String result = "";
-		for (int x = 1; x <= 3; x++) {
+		for (int x = 1; x <= 5; x++) {
 			try {
 				Socket socket = new Socket();
 				startTime = System.nanoTime();
@@ -77,59 +78,31 @@ public class NetworkUtils {
 		return execute(new ProcessBuilder("traceroute", "-w", "3", "-q", "1", "-m", "18", "-n", host));
 	}
 
-	public static String ssltest(String host, String port) throws Exception {
-/* 		Got stuck trying to use OpenSSL to fetch the certs. The first way it works, 
-		but the connection is kept opened and except to send to data to the remote server; 
-		so I tried to add "| echo" to emulate a return keypress, but I'm not able to run openssl that way.
-		Leavig it all here in case someone can fix it.
+	public static String certest(String host, String port) throws Exception {
+		return execute(new ProcessBuilder("openssl", "s_client", "-showcerts", "-servername", host, "-connect", host+":"+port));
+	}
 
-		return execute(new ProcessBuilder("openssl", "s_client", "-showcerts", "-servername", host, "-connect", host+":"+port, "| echo"));
-		return execute(new ProcessBuilder("/bin/sh", "openssl s_client -showcerts -servername "+host+" -connect "+host+":"+port+ " | echo")); */
+	public static String cipherTest(String host, String port) throws Exception {
+		String remoteEndpointSupportedCiphers = "List of supported ciphers:\n\n";
+		String[] openSslAvailableCiphers = execute(new ProcessBuilder("openssl","ciphers","ALL:!eNULL")).split(":");
 
-		Certificate[] certs;
-		String result;
-		SSLSession mySSLSession;
-
-		try {
-			SSLSocketFactory factory =
-			(SSLSocketFactory)SSLSocketFactory.getDefault();
-		
-			SSLSocket socket =
-				(SSLSocket)factory.createSocket(host, Integer.parseInt(port));
-			socket.startHandshake();
-			certs = socket.getSession().getPeerCertificates();
-			mySSLSession = socket.getSession();
-			socket.close();
-		} catch (Exception e) {
-			return e.getMessage();
+		for (String cipher : openSslAvailableCiphers) {
+			if (execute(new ProcessBuilder("openssl","s_client","-cipher",cipher,"-connect",host+":"+port)).contains("CONNECTED")) {
+				remoteEndpointSupportedCiphers = remoteEndpointSupportedCiphers + cipher + ": YES\n";
+			} else {
+				remoteEndpointSupportedCiphers = remoteEndpointSupportedCiphers + cipher + ": NO\n";
+			}
 		}
-
-		result = "SSL connection results\n";
-		result = result + "======================\n";
-
-		result = result + "Negotiated protocol: " + mySSLSession.getProtocol() +"\n";
-		result = result + "Negotiated cipher suite: " + mySSLSession.getCipherSuite() + "\n\n";
-		
-		result = result + "Certificates retrieved: " + certs.length + "\n";
-		for (Certificate cert : certs) {
-			result = result + "\nCertificate\n===========\n";
-			result = result + cert.toString();
-			result = result + "";
-            if(cert instanceof X509Certificate) {
-                try {
-                    ( (X509Certificate) cert).checkValidity();
-                    result = result + "\nCertificate is active for current date\n\n";
-                } catch(CertificateExpiredException cee) {
-                    result = result + "\nCertificate is expired\n\n";
-                }
-            }
-        }
-
-		return "SSL connection successful!\n\n" + result;
+		return remoteEndpointSupportedCiphers;
 	}
 
 	private static String execute(ProcessBuilder pb) throws IOException {
 		Process p = pb.start();
+		OutputStream stdin = p.getOutputStream();
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stdin));
+		writer.write("\n");
+        writer.flush();
+        writer.close();
 		SequenceInputStream sis = new SequenceInputStream(p.getInputStream(), p.getErrorStream());
 		java.util.Scanner s = new java.util.Scanner(sis).useDelimiter("\\A");
 		return s.hasNext() ? s.next() : "";
