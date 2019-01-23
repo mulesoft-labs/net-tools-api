@@ -100,7 +100,88 @@ securitySchemes:
             example: |
               curl: (7) Failed to connect to 10.200.27.15 port 443: Timed out             
 
-/ssltest:
+/ciphertest:
+  get:
+    description: Checks available SSL cipher suites for a given endpoint
+    queryParameters:
+      host:
+        description: The domain or ip of the host to connect to
+        type: string
+      port:
+        description: The port number of host to be tested
+        type: number        
+    responses: 
+      200:
+        body: 
+          text/plain:
+            example: |
+            List of supported ciphers:
+            ECDHE-ECDSA-CHACHA20-POLY1305: YES
+            ECDHE-RSA-CHACHA20-POLY1305: YES
+            DHE-RSA-CHACHA20-POLY1305: YES
+            ECDHE-RSA-AES256-GCM-SHA384: YES
+            ECDHE-ECDSA-AES256-GCM-SHA384: YES
+            ECDHE-RSA-AES256-SHA384: YES
+            ECDHE-ECDSA-AES256-SHA384: YES
+            ECDHE-RSA-AES256-SHA: YES
+            ECDHE-ECDSA-AES256-SHA: YES
+            DHE-RSA-AES256-GCM-SHA384: YES
+            DHE-RSA-AES256-SHA256: YES
+            DHE-RSA-AES256-SHA: YES
+            GOST2012256-GOST89-GOST89: YES
+            DHE-RSA-CAMELLIA256-SHA256: YES
+            DHE-RSA-CAMELLIA256-SHA: YES
+            GOST2001-GOST89-GOST89: YES
+            AECDH-AES256-SHA: YES
+            ADH-AES256-GCM-SHA384: YES
+            ADH-AES256-SHA256: YES
+            ADH-AES256-SHA: YES
+            ADH-CAMELLIA256-SHA256: YES
+            ADH-CAMELLIA256-SHA: YES
+            AES256-GCM-SHA384: YES
+            AES256-SHA256: YES
+            AES256-SHA: YES
+            CAMELLIA256-SHA256: YES
+            CAMELLIA256-SHA: YES
+            ECDHE-RSA-AES128-GCM-SHA256: YES
+            ECDHE-ECDSA-AES128-GCM-SHA256: YES
+            ECDHE-RSA-AES128-SHA256: YES
+            ECDHE-ECDSA-AES128-SHA256: YES
+            ECDHE-RSA-AES128-SHA: YES
+            ECDHE-ECDSA-AES128-SHA: YES
+            DHE-RSA-AES128-GCM-SHA256: YES
+            DHE-RSA-AES128-SHA256: YES
+            DHE-RSA-AES128-SHA: YES
+            DHE-RSA-CAMELLIA128-SHA256: YES
+            DHE-RSA-CAMELLIA128-SHA: YES
+            AECDH-AES128-SHA: YES
+            ADH-AES128-GCM-SHA256: YES
+            ADH-AES128-SHA256: YES
+            ADH-AES128-SHA: YES
+            ADH-CAMELLIA128-SHA256: YES
+            ADH-CAMELLIA128-SHA: YES
+            AES128-GCM-SHA256: YES
+            AES128-SHA256: YES
+            AES128-SHA: YES
+            CAMELLIA128-SHA256: YES
+            CAMELLIA128-SHA: YES
+            ECDHE-RSA-RC4-SHA: YES
+            ECDHE-ECDSA-RC4-SHA: YES
+            AECDH-RC4-SHA: YES
+            ADH-RC4-MD5: YES
+            RC4-SHA: YES
+            RC4-MD5: YES
+            ECDHE-RSA-DES-CBC3-SHA: YES
+            ECDHE-ECDSA-DES-CBC3-SHA: YES
+            EDH-RSA-DES-CBC3-SHA: YES
+            AECDH-DES-CBC3-SHA: YES
+            ADH-DES-CBC3-SHA: YES
+            DES-CBC3-SHA: YES
+            EDH-RSA-DES-CBC-SHA: YES
+            ADH-DES-CBC-SHA: YES
+            DES-CBC-SHA: NO
+
+/certest:
   get:
     description: Runs an SSL connection and pulls the certificates found
     queryParameters:
@@ -114,4 +195,131 @@ securitySchemes:
       200:
         body: 
           text/plain:
-            example: SSL failure 
+            example: |
+              CONNECTED(00000005)
+              ---
+              Certificate chain
+              0 s:/C=US/ST=California/L=Mountain View/O=Google LLC/CN=*.google.com
+                i:/C=US/O=Google Trust Services/CN=Google Internet Authority G3
+              -----BEGIN CERTIFICATE-----
+              MIIHxzCCBq+gAwIBAgIIEW2Lf7xzMtQwDQYJKoZIhvcNAQELBQAwVDELMAkGA1UE
+              BhMCVVMxHjAcBgNVBAoTFUdvb2dsZSBUcnVzdCBTZXJ2aWNlczElMCMGA1UEAxMc
+              R29vZ2xlIEludGVybmV0IEF1dGhvcml0eSBHMzAeFw0xODEyMTkwODE3MzlaFw0x
+              OTAzMTMwODE3MDBaMGYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIDApDYWxpZm9ybmlh
+              MRYwFAYDVQQHDA1Nb3VudGFpbiBWaWV3MRMwEQYDVQQKDApHb29nbGUgTExDMRUw
+              EwYDVQQDDAwqLmdvb2dsZS5jb20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASU
+              PDbNhBcnXculr/+1ShjY2R01Mp4pSy9gHHKYWdZ33V1QLCAUH1hunP+RHC0kqpDQ
+              AxZBu7FVCQiA7d/ITmE1o4IFVDCCBVAwEwYDVR0lBAwwCgYIKwYBBQUHAwEwDgYD
+              VR0PAQH/BAQDAgeAMIIEGQYDVR0RBIIEEDCCBAyCDCouZ29vZ2xlLmNvbYINKi5h
+              bmRyb2lkLmNvbYIWKi5hcHBlbmdpbmUuZ29vZ2xlLmNvbYISKi5jbG91ZC5nb29n
+              bGUuY29tggYqLmcuY2+CDiouZ2NwLmd2dDIuY29tggoqLmdncGh0LmNughYqLmdv
+              b2dsZS1hbmFseXRpY3MuY29tggsqLmdvb2dsZS5jYYILKi5nb29nbGUuY2yCDiou
+              Z29vZ2xlLmNvLmlugg4qLmdvb2dsZS5jby5qcIIOKi5nb29nbGUuY28udWuCDyou
+              Z29vZ2xlLmNvbS5hcoIPKi5nb29nbGUuY29tLmF1gg8qLmdvb2dsZS5jb20uYnKC
+              DyouZ29vZ2xlLmNvbS5jb4IPKi5nb29nbGUuY29tLm14gg8qLmdvb2dsZS5jb20u
+              dHKCDyouZ29vZ2xlLmNvbS52boILKi5nb29nbGUuZGWCCyouZ29vZ2xlLmVzggsq
+              Lmdvb2dsZS5mcoILKi5nb29nbGUuaHWCCyouZ29vZ2xlLml0ggsqLmdvb2dsZS5u
+              bIILKi5nb29nbGUucGyCCyouZ29vZ2xlLnB0ghIqLmdvb2dsZWFkYXBpcy5jb22C
+              DyouZ29vZ2xlYXBpcy5jboIUKi5nb29nbGVjb21tZXJjZS5jb22CESouZ29vZ2xl
+              dmlkZW8uY29tggwqLmdzdGF0aWMuY26CDSouZ3N0YXRpYy5jb22CEiouZ3N0YXRp
+              Y2NuYXBwcy5jboIKKi5ndnQxLmNvbYIKKi5ndnQyLmNvbYIUKi5tZXRyaWMuZ3N0
+              YXRpYy5jb22CDCoudXJjaGluLmNvbYIQKi51cmwuZ29vZ2xlLmNvbYIWKi55b3V0
+              dWJlLW5vY29va2llLmNvbYINKi55b3V0dWJlLmNvbYIWKi55b3V0dWJlZWR1Y2F0
+              aW9uLmNvbYIRKi55b3V0dWJla2lkcy5jb22CByoueXQuYmWCCyoueXRpbWcuY29t
+              ghphbmRyb2lkLmNsaWVudHMuZ29vZ2xlLmNvbYILYW5kcm9pZC5jb22CG2RldmVs
+              b3Blci5hbmRyb2lkLmdvb2dsZS5jboIcZGV2ZWxvcGVycy5hbmRyb2lkLmdvb2ds
+              ZS5jboIEZy5jb4IIZ2dwaHQuY26CBmdvby5nbIIUZ29vZ2xlLWFuYWx5dGljcy5j
+              b22CCmdvb2dsZS5jb22CEmdvb2dsZWNvbW1lcmNlLmNvbYIYc291cmNlLmFuZHJv
+              aWQuZ29vZ2xlLmNuggp1cmNoaW4uY29tggp3d3cuZ29vLmdsggh5b3V0dS5iZYIL
+              eW91dHViZS5jb22CFHlvdXR1YmVlZHVjYXRpb24uY29tgg95b3V0dWJla2lkcy5j
+              b22CBXl0LmJlMGgGCCsGAQUFBwEBBFwwWjAtBggrBgEFBQcwAoYhaHR0cDovL3Br
+              aS5nb29nL2dzcjIvR1RTR0lBRzMuY3J0MCkGCCsGAQUFBzABhh1odHRwOi8vb2Nz
+              cC5wa2kuZ29vZy9HVFNHSUFHMzAdBgNVHQ4EFgQUKET+BQTs0UoGjgJYhV2aOLEG
+              6xkwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBR3wrhQmmd2drEtwobQg6B+pn66
+              SzAhBgNVHSAEGjAYMAwGCisGAQQB1nkCBQMwCAYGZ4EMAQICMDEGA1UdHwQqMCgw
+              JqAkoCKGIGh0dHA6Ly9jcmwucGtpLmdvb2cvR1RTR0lBRzMuY3JsMA0GCSqGSIb3
+              DQEBCwUAA4IBAQCKUizs4O7EGDNxOBDqVSpiaBMl3KYuANA7mfJ5m7ryQA+Degzo
+              /IJkbU1iXmC9l9L0IKMxsPqNQSXJuqrox32eSTPkGCA8dHYXtcw4acr88bG8jnqa
+              +fQBHo5R4Z6fZsTdgckDvhwDRhj/O2285VCQE85aNqH8VmvnMAS6Hv8tiRNfJCXN
+              55IRg+jZE55ELDHG63Ulq/lKLHJYLT+yeScD64weNWL2UrgRPF8sxR7EZcyP8DcZ
+              2/IfgDhTbI1+CBNBC6RtSBqvZy84Rj6Awu7Zih0SDBWwnXrKKdYbaLsVXA0jnPph
+              9CSSAQ3VLQln4PAl/PIq9Jn8y9TlPYXY/67d
+              -----END CERTIFICATE-----
+              1 s:/C=US/O=Google Trust Services/CN=Google Internet Authority G3
+                i:/OU=GlobalSign Root CA - R2/O=GlobalSign/CN=GlobalSign
+              -----BEGIN CERTIFICATE-----
+              MIIEXDCCA0SgAwIBAgINAeOpMBz8cgY4P5pTHTANBgkqhkiG9w0BAQsFADBMMSAw
+              HgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMjETMBEGA1UEChMKR2xvYmFs
+              U2lnbjETMBEGA1UEAxMKR2xvYmFsU2lnbjAeFw0xNzA2MTUwMDAwNDJaFw0yMTEy
+              MTUwMDAwNDJaMFQxCzAJBgNVBAYTAlVTMR4wHAYDVQQKExVHb29nbGUgVHJ1c3Qg
+              U2VydmljZXMxJTAjBgNVBAMTHEdvb2dsZSBJbnRlcm5ldCBBdXRob3JpdHkgRzMw
+              ggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDKUkvqHv/OJGuo2nIYaNVW
+              XQ5IWi01CXZaz6TIHLGp/lOJ+600/4hbn7vn6AAB3DVzdQOts7G5pH0rJnnOFUAK
+              71G4nzKMfHCGUksW/mona+Y2emJQ2N+aicwJKetPKRSIgAuPOB6Aahh8Hb2XO3h9
+              RUk2T0HNouB2VzxoMXlkyW7XUR5mw6JkLHnA52XDVoRTWkNty5oCINLvGmnRsJ1z
+              ouAqYGVQMc/7sy+/EYhALrVJEA8KbtyX+r8snwU5C1hUrwaW6MWOARa8qBpNQcWT
+              kaIeoYvy/sGIJEmjR0vFEwHdp1cSaWIr6/4g72n7OqXwfinu7ZYW97EfoOSQJeAz
+              AgMBAAGjggEzMIIBLzAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0lBBYwFAYIKwYBBQUH
+              AwEGCCsGAQUFBwMCMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHfCuFCa
+              Z3Z2sS3ChtCDoH6mfrpLMB8GA1UdIwQYMBaAFJviB1dnHB7AagbeWbSaLd/cGYYu
+              MDUGCCsGAQUFBwEBBCkwJzAlBggrBgEFBQcwAYYZaHR0cDovL29jc3AucGtpLmdv
+              b2cvZ3NyMjAyBgNVHR8EKzApMCegJaAjhiFodHRwOi8vY3JsLnBraS5nb29nL2dz
+              cjIvZ3NyMi5jcmwwPwYDVR0gBDgwNjA0BgZngQwBAgIwKjAoBggrBgEFBQcCARYc
+              aHR0cHM6Ly9wa2kuZ29vZy9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEA
+              HLeJluRT7bvs26gyAZ8so81trUISd7O45skDUmAge1cnxhG1P2cNmSxbWsoiCt2e
+              ux9LSD+PAj2LIYRFHW31/6xoic1k4tbWXkDCjir37xTTNqRAMPUyFRWSdvt+nlPq
+              wnb8Oa2I/maSJukcxDjNSfpDh/Bd1lZNgdd/8cLdsE3+wypufJ9uXO1iQpnh9zbu
+              FIwsIONGl1p3A8CgxkqI/UAih3JaGOqcpcdaCIzkBaR9uYQ1X4k2Vg5APRLouzVy
+              7a8IVk6wuy6pm+T7HT4LY8ibS5FEZlfAFLSW8NwsVz9SBK2Vqn1N0PIMn5xA6NZV
+              c7o835DLAFshEWfC7TIe3g==
+              -----END CERTIFICATE-----
+              ---
+              Server certificate
+              subject=/C=US/ST=California/L=Mountain View/O=Google LLC/CN=*.google.com
+              issuer=/C=US/O=Google Trust Services/CN=Google Internet Authority G3
+              ---
+              No client certificate CA names sent
+              Server Temp Key: ECDH, X25519, 253 bits
+              ---
+              SSL handshake has read 3597 bytes and written 304 bytes
+              ---
+              New, TLSv1/SSLv3, Cipher is ECDHE-ECDSA-CHACHA20-POLY1305
+              Server public key is 256 bit
+              Secure Renegotiation IS supported
+              Compression: NONE
+              Expansion: NONE
+              No ALPN negotiated
+              SSL-Session:
+                  Protocol  : TLSv1.2
+                  Cipher    : ECDHE-ECDSA-CHACHA20-POLY1305
+                  Session-ID: 4D7B444F7F54FC82EFF5C0515C63A9614B786162DA28858806A7E154C9FEC9A7
+                  Session-ID-ctx: 
+                  Master-Key: BD07BE97BE21A2AFEEC6C2F5EC43434D73F158768B6D83756EDEFBF09B8E2F70B73CBFD850E4067A196A483AC17061A2
+                  TLS session ticket lifetime hint: 100800 (seconds)
+                  TLS session ticket:
+                  0000 - 00 a5 80 f3 98 83 54 59-64 80 74 8d 0e a6 b8 c6   ......TYd.t.....
+                  0010 - 47 29 9a 43 5f 65 43 b0-87 02 f5 85 48 4f 33 07   G).C_eC.....HO3.
+                  0020 - f2 f1 d7 cf bd 15 28 37-e4 e4 91 48 f6 87 dc 7c   ......(7...H...|
+                  0030 - f3 08 0a b5 15 f6 64 20-47 4f 12 47 ee 73 3d cb   ......d GO.G.s=.
+                  0040 - 87 15 13 22 4c 5e 74 8e-08 a8 9a 1f bb c1 75 c4   ..."L^t.......u.
+                  0050 - d6 ee 07 a5 c7 50 b1 72-cc e2 11 31 d9 33 bb 6e   .....P.r...1.3.n
+                  0060 - 1f ed a6 5a 71 40 c1 80-25 4a 0d 90 ce 0c d2 db   ...Zq@..%J......
+                  0070 - 0c 0e b6 be d4 cc 5a 05-74 14 c2 a6 83 1d 68 bc   ......Z.t.....h.
+                  0080 - 75 61 a5 23 62 7a e4 72-d0 56 7d 8d 02 91 68 cd   ua.#bz.r.V}...h.
+                  0090 - 45 14 ea 8c 8e 09 d8 f1-02 53 a0 70 d5 6e 0c c2   E........S.p.n..
+                  00a0 - d3 7e 84 0f 61 96 b9 6c-68 fd 3f 84 f0 1e 2f a5   .~..a..lh.?.../.
+                  00b0 - bc f5 fe ea 6b 2c f3 25-56 82 5f a0 a5 69 58 d0   ....k,.%V._..iX.
+                  00c0 - 56 47 a9 8f 01 3d 6d f7-9f 93 4f cd 23 f9 df b7   VG...=m...O.#...
+                  00d0 - b6 ac b5 ed 77                                    ....w
+
+                  Start Time: 1548235639
+                  Timeout   : 7200 (sec)
+                  Verify return code: 0 (ok)
+              ---
+              depth=2 OU = GlobalSign Root CA - R2, O = GlobalSign, CN = GlobalSign
+              verify return:1
+              depth=1 C = US, O = Google Trust Services, CN = Google Internet Authority G3
+              verify return:1
+              depth=0 C = US, ST = California, L = Mountain View, O = Google LLC, CN = *.google.com
+              verify return:1
+              DONE

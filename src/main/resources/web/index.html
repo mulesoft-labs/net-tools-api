@@ -143,7 +143,8 @@ input:disabled {
                     <option value="socket">Socket</option>
                     <option value="dns">DNS</option>
                     <option value="curl">curl</option>
-                    <option value="ssltest">ssl</option>
+                    <option value="certest">certificates</option>
+                    <option value="ciphertest">ssl ciphers</option>
                 </select>
                 <input name="ip" placeholder="IP Address or Host" type="text" title="IP" id="ip" />
                 <input name="port" placeholder="Port" type="text" title="PORT" id="port" />
@@ -203,7 +204,11 @@ input:disabled {
                         $("#path").attr("disabled", true);
                         $("#socketHelp").show();
                         break;
-                      case "ssltest":
+                      case "certest":
+                        $("#path").attr("disabled", true);
+                        $("#socketHelp").show();
+                        break;
+                      case "ciphertest":
                         $("#path").attr("disabled", true);
                         $("#socketHelp").show();
                         break;
@@ -228,13 +233,13 @@ input:disabled {
                     var operation = $("#operation").val();
                     var ip = $("#ip").val();
                     var path = (operation === 'curl') ? $("#path").val() : '';
-                    var port = (operation === 'socket') | (operation === 'curl') | (operation === 'ssltest') ? $("#port").val() : '';
+                    var port = (operation === 'socket') | (operation === 'curl') | (operation === 'certest') | (operation === 'ciphertest') ? $("#port").val() : '';
                     if (!ip) {
                         toastr["error"]("Missing IP", "Invalid Arguments")
                         console.error("Missing IP!");
                         return;
                     }
-                    if ((operation === 'socket' || operation === 'ssltest') && !port) {
+                    if ((operation === 'socket' || operation === 'certest' || operation === 'ciphertest') && !port) {
                         toastr["error"]("Missing port", "Invalid Arguments")
                         console.error('Missing port!');
                         return;
@@ -245,7 +250,7 @@ input:disabled {
                         return;
                     }
                     var apiurl = 'api/' + operation + '?host=' + ip;
-                    if (operation === 'socket' || operation === 'ssltest') {
+                    if (operation === 'socket' || operation === 'certest' || operation === 'ciphertest') {
                         apiurl += '&port=' + port;
                     }
                     if (operation === 'curl') {
