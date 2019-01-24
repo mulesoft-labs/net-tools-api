@@ -20,3 +20,4 @@ target
 target/*
 .mule/cache.bin
 .mule/cache.bin
+.vscode/
