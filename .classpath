@@ -9,6 +9,15 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="MULE_LIB/org.mule.modules/mule-apikit-module/1.1.7"/>
+	<classpathentry kind="con" path="MULE_LIB/org.mule.modules/mule-spring-module/1.2.0"/>
+	<classpathentry kind="con" path="MULE_LIB/org.mule.modules/mule-scripting-module/1.1.1"/>
+	<classpathentry kind="con" path="MULE_LIB/org.mule.module/mule-java-module/1.1.1"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="src/main/mule"/>
 	<classpathentry kind="src" output="target/classes" path="src/main/java">
 		<attributes>
@@ -35,15 +44,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src/test/munit"/>
-	<classpathentry kind="con" path="MULE_LIB/org.mule.modules/mule-apikit-module/1.1.7"/>
-	<classpathentry kind="con" path="MULE_LIB/org.mule.modules/mule-spring-module/1.2.0"/>
-	<classpathentry kind="con" path="MULE_LIB/org.mule.modules/mule-scripting-module/1.1.1"/>
-	<classpathentry kind="con" path="MULE_LIB/org.mule.module/mule-java-module/1.1.1"/>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="src" path="target/generated-sources/annotations">
 		<attributes>
 			<attribute name="optional" value="true"/>
