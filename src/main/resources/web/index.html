@@ -149,6 +149,7 @@ input:disabled {
                 <input name="ip" placeholder="IP Address or Host" type="text" title="IP" id="ip" />
                 <input name="port" placeholder="Port" type="text" title="PORT" id="port" />
                 <input name="path" placeholder="Path" type="text" title="PATH" id="path" />
+                <input name="dnsServer" placeholder="dns server" type="text" title="DNS SERVER" id="dnsServer" />
                 <button type="button" id="check">Run</button>
                 <button type="button" id="clean">Clean Console</button>
               </div>
@@ -157,7 +158,7 @@ input:disabled {
 			  <div class="helpBox" id="pingHelp">Set an IP Address or Hostname and hit Run</div>
 			  <div class="helpBox" id="tracerouteHelp" style="display: none;">Set an IP Address or Hostname and hit Run</div>	
 			  <div class="helpBox" id="socketHelp" style="display: none;">Set an IP Address or Hostname, the Port and hit Run</div>	
-			  <div class="helpBox" id="dnsHelp" style="display: none;">Set a Hostname and hit Run</div>	
+			  <div class="helpBox" id="dnsHelp" style="display: none;">Set a Hostname and hit Run. [Optionally] Specify a DNS Server other than the VPC's.</div>	
 			  <div class="helpBox" id="curlHelp" style="display: none;">Set an IP Address or Schema (http-https://) plus Hostname, the Port, the Path and hit Run</div>	
 			</div>
             <pre id="output">
@@ -193,31 +194,38 @@ input:disabled {
                       case "ping":
                         $("#path").attr("disabled", true);
                         $("#port").attr("disabled", true);
+                        $("#dnsServer").attr("disabled", true);
                         $("#pingHelp").show();
                         break;
                       case "traceroute":
                         $("#path").attr("disabled", true);
                         $("#port").attr("disabled", true);
+                        $("#dnsServer").attr("disabled", true);
                         $("#tracerouteHelp").show();
                         break;
                       case "socket":
                         $("#path").attr("disabled", true);
+                        $("#dnsServer").attr("disabled", true);
                         $("#socketHelp").show();
                         break;
                       case "certest":
                         $("#path").attr("disabled", true);
+                        $("#dnsServer").attr("disabled", true);
                         $("#socketHelp").show();
                         break;
                       case "ciphertest":
                         $("#path").attr("disabled", true);
+                        $("#dnsServer").attr("disabled", true);
                         $("#socketHelp").show();
                         break;
                       case "dns":
                         $("#path").attr("disabled", true);
                         $("#port").attr("disabled", true);
+                        $("#dnsServer").attr("value", "default");
                         $("#dnsHelp").show();
                         break;
                       case "curl":
+                        $("#dnsServer").attr("disabled", true);
                     	$("#curlHelp").show();
                         break;
                     default:
@@ -234,6 +242,7 @@ input:disabled {
                     var ip = $("#ip").val();
                     var path = (operation === 'curl') ? $("#path").val() : '';
                     var port = (operation === 'socket') | (operation === 'curl') | (operation === 'certest') | (operation === 'ciphertest') ? $("#port").val() : '';
+                    var dnsServer = (operation === 'dns') ? $("#dnsServer").val() : '';
                     if (!ip) {
                         toastr["error"]("Missing IP", "Invalid Arguments")
                         console.error("Missing IP!");
@@ -253,6 +262,9 @@ input:disabled {
                     if (operation === 'socket' || operation === 'certest' || operation === 'ciphertest') {
                         apiurl += '&port=' + port;
                     }
+                    if (operation === 'dns') {
+                        apiurl += '&dnsServer=' + dnsServer;
+                    }
                     if (operation === 'curl') {
                         apiurl += '&path=' + path;
                         apiurl += '&port=' + port;
@@ -261,8 +273,8 @@ input:disabled {
                     $.ajax({
                         url: apiurl
                     })
-                    .done(function(result) {
-                        $("#output").append('<pre class="command">&gt; ' + operation + ' ' + ip + ' ' + port + ' ' + path + '</pre>');
+                    .done(function(result) { 
+                        $("#output").append('<pre class="command">&gt; ' + operation + ' ' + ip + ' ' + port + ' ' + path + dnsServer + '</pre>');
                         if (operation === 'curl') {
                         	$("#output").append('<textarea class="output">' + result + '</textarea>');
                         } else {

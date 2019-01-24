@@ -15,20 +15,27 @@ import java.io.BufferedWriter;
 
 public class NetworkUtils {
 
-	public static String resolveIPs(String host) throws UnknownHostException {
-		InetAddress[] addresses = InetAddress.getAllByName(host);
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < addresses.length; i++) {
-			if (i != 0) {
-				sb.append(", ");
+	public static String resolveIPs(String host, String dnsServer) throws UnknownHostException {
+		if (dnsServer.equals("default"))
+ 		{
+			InetAddress[] addresses = InetAddress.getAllByName(host);
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < addresses.length; i++) {
+				if (i != 0) {
+					sb.append("\n");
+				}
+				sb.append(addresses[i].getHostAddress());
 			}
-			sb.append(addresses[i].getHostAddress());
+			return sb.toString();
+		}	
+		else {
+ 			dnsServer = "@" + dnsServer;
+			try {
+				return execute(new ProcessBuilder("dig", "+short", dnsServer, host));
+			} catch (IOException e) {
+				return e.getMessage();
+			} 
 		}
-		return sb.toString();
-	}
-
-	public static String ping(String host) throws Exception {
-		return execute(new ProcessBuilder("ping", "-c", "4", host));
 	}
 
 	public static String curl(String host, String port, String path) throws IOException {

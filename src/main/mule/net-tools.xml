@@ -172,7 +172,7 @@ NetworkUtils::curl(attributes.queryParams.host, attributes.queryParams.port, att
 output application/java
 import java!com::mulesoft::tool::network::NetworkUtils
 ---
-NetworkUtils::resolveIPs(attributes.queryParams.host)]]></ee:set-payload>
+NetworkUtils::resolveIPs(attributes.queryParams.host, attributes.queryParams.dnsServer)]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>
