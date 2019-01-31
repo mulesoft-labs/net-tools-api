@@ -100,7 +100,7 @@ public class NetworkUtils {
 		String[] openSslAvailableCiphers = execute(new ProcessBuilder("openssl","ciphers","ALL:!eNULL")).split(":");
 
 		for (String cipher : openSslAvailableCiphers) {
-			if (execute(new ProcessBuilder("openssl","s_client","-cipher",cipher,"-connect",host+":"+port)).contains("CONNECTED")) {
+			if (execute(new ProcessBuilder("openssl", "s_client", "-cipher", cipher, "-servername", host, "-connect", host+":"+port)).contains("BEGIN CERTIFICATE")) {
 				remoteEndpointSupportedCiphers = remoteEndpointSupportedCiphers + cipher + ": YES\n";
 			} else {
 				remoteEndpointSupportedCiphers = remoteEndpointSupportedCiphers + cipher + ": NO\n";
