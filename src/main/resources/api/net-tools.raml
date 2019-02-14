@@ -93,3 +93,35 @@ securitySchemes:
           text/plain:
             example: |
               curl: (7) Failed to connect to 10.200.27.15 port 443: Timed out             
+
+/ciphertest:
+  get:
+    description: Checks available SSL cipher suites for a given endpoint
+    queryParameters:
+      host:
+        description: The domain or ip of the host to connect to
+        type: string
+      port:
+        description: The port number of host to be tested
+        type: number        
+    responses: 
+      200:
+        body: 
+          text/plain:
+            example: List of supported ciphers...
+
+/certest:
+  get:
+    description: Runs an SSL connection and pulls the certificates found
+    queryParameters:
+      host:
+        description: The domain or ip of the host to connect to
+        type: string
+      port:
+        description: The port number of host to be tested
+        type: number        
+    responses: 
+      200:
+        body: 
+          text/plain:
+            example: CONNECTED(00000005)
