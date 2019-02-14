@@ -30,10 +30,14 @@ attributes.requestPath]]></ee:set-variable>
 } else {
 	org.mule.runtime.core.api.util.IOUtils.getResourceAsString(&quot;web&quot; + path, this.getClass());
 }</scripting:code>
-			<scripting:parameters ><![CDATA[#[{path: vars.path}]]]></scripting:parameters>
+			<scripting:parameters><![CDATA[#[{path: vars.path}]]]></scripting:parameters>
 		</scripting:execute>
 	</flow>
-    <flow name="net-tools-main">
+    <flow name="ui-css" doc:id="bc50f62f-51f7-4841-955b-014eb52b2976" >
+		<http:listener doc:name="Listener" doc:id="24f59827-51c3-48d1-abce-18d4143f58f3" config-ref="net-tools-httpListenerConfig" path="/css/*" outputMimeType="text/css"/>
+		<flow-ref doc:name="Flow Reference" doc:id="4a35a0d4-31a1-4514-a348-a4eb4d089559" name="ui"/>
+	</flow>
+	<flow name="net-tools-main">
         <http:listener config-ref="net-tools-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
@@ -161,7 +165,7 @@ output application/json
 output application/java
 import java!com::mulesoft::tool::network::NetworkUtils
 ---
-NetworkUtils::curl(attributes.queryParams.host, attributes.queryParams.port, attributes.queryParams.path)]]></ee:set-payload>
+NetworkUtils::curl(attributes.queryParams.url)]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
     </flow>
