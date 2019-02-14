@@ -82,17 +82,11 @@ securitySchemes:
                127.0.0.1
 /curl:
   get:
-    description: Runs a curl from the Mule host to the specified resource (ip, path, port) 
+    description: Runs a curl from the Mule host to the specified resource
     queryParameters:
-      host:
-        description: The domain or ip of the host to traceroute
-        type: string
-      path:
-        description: The path of the resource to be fetched
-        type: string
-      port:
-        description: The port number of host to be tested
-        type: number        
+      url:
+        description: Target URL
+        type: string 
     responses: 
       200:
         body: 
