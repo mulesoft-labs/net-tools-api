@@ -46,8 +46,7 @@ public class NetworkUtils {
 		//-i include protocol headers
 		//-L follow redirects
 		//-k insecure
-		//-E cert status
-		return execute(new ProcessBuilder("curl","-k", "-E", "-i","-L", url));
+		return execute(new ProcessBuilder("curl","-k", "-i","-L", url));
 	}
 
 	public static String testConnect(String host, String port) {
