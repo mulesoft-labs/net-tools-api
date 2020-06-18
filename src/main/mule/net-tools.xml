@@ -3,8 +3,9 @@
 http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <global-property name="port" value="8081"/>
     <http:listener-config name="net-tools-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8081" />
+        <http:listener-connection host="0.0.0.0" port="${port}" />
     </http:listener-config>
     <apikit:config name="net-tools-config" raml="net-tools.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     	<spring:config name="Spring_Config" doc:id="3b613b3b-3bc8-47ee-897c-e00fe681b775" files="beans.xml" />

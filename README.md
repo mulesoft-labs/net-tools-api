@@ -11,3 +11,5 @@ Last build can be found here: https://github.com/mulesoft-labs/net-tools-api/rel
 The UI can be access hitting *http://{app-name}.cloudhub.io*. It is protected by Basic Auth, the default credentials are "vpc-tools"/"SomePass". You can change those credentials setting "user" and "pass" properties in the CloudHub UI while deploying.
 
 You can also use the API Console accessing *http://{app-name}.cloudhub.io/api/console*.
+
+If you want to use the app with a dedicated load balancer, you need to set 8092 (or 8091) to "port" property in the CloudHub UI. See [VPC Network Architecture](https://docs.mulesoft.com/runtime-manager/vpc-architecture-concept) document for more details.
