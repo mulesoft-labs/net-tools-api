@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core
+		http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+	<flow name="get:\curl:net-tools-config">
+        <logger
+        	level="INFO"
+        	message="get:\curl:net-tools-config" />
+		<ee:transform
+        	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+        	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core
+        		http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd"
+			doc:name="Transform Message"
+			doc:id="4f7f3c90-3e97-4810-bd26-031a2ac25e3f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+import java!com::mulesoft::tool::network::NetworkUtils
+---
+NetworkUtils::curl(attributes.queryParams.url)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+    </flow>
+    <flow name="get:\dns:net-tools-config">
+        <ee:transform
+        	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+        	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core
+        		http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd"
+        	doc:id="41f2a7b5-8c5f-44fd-a221-ad919f125b04">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+import java!com::mulesoft::tool::network::NetworkUtils
+---
+NetworkUtils::resolveIPs(attributes.queryParams.host, attributes.queryParams.dnsServer)]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\ping:net-tools-config">
+		<ee:transform
+			doc:name="Transform Message"
+        	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+        	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core
+        		http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd"
+			doc:id="0988fbe5-948e-4878-a836-bcedfbf064de" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+import java!com::mulesoft::tool::network::NetworkUtils
+---
+NetworkUtils::ping(attributes.queryParams.host)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+    </flow>
+    <flow name="get:\socket:net-tools-config">
+        <ee:transform
+        	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+        	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core
+        		http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd"
+        		doc:id="a61677c0-3ed5-4591-a409-d12a1c733f4f">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+import java!com::mulesoft::tool::network::NetworkUtils
+---
+NetworkUtils::testConnect(attributes.queryParams.host, attributes.queryParams.port)]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow
+    	name="get:\certest:net-tools-config"
+    	doc:id="3e2b862f-1798-41b6-82ab-2d04a93fff7f" >
+		<ee:transform
+			doc:name="Transform Message"
+        	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+        	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core
+        		http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd"
+			doc:id="6fb6e715-c7ed-417d-9227-e0bb1503e69a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+import java!com::mulesoft::tool::network::NetworkUtils
+---
+NetworkUtils::certest(attributes.queryParams.host, attributes.queryParams.port)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow
+		name="get:\ciphertest:net-tools-config"
+		doc:id="88b5df44-dc7d-4574-bd68-beab9a0ed580" >
+		<ee:transform
+			doc:name="Transform Message"
+        	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+        	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core
+        		http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd"
+			doc:id="59b72fef-c3e1-4028-a8e6-436c7a0ece77" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+import java!com::mulesoft::tool::network::NetworkUtils
+---
+NetworkUtils::cipherTest(attributes.queryParams.host, attributes.queryParams.port)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="get:\traceroute:net-tools-config">
+        <ee:transform
+        	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+        	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core 
+        		http://www.mulesoft.org/schema/mule/http
+        		http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+        		http://www.mulesoft.org/schema/mule/scripting
+        		http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+        		http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd"
+        	doc:id="ca22b062-4cc0-4358-b6aa-0a7d618ae4dc">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+import java!com::mulesoft::tool::network::NetworkUtils
+---
+NetworkUtils::traceRoute(attributes.queryParams.host)]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>
