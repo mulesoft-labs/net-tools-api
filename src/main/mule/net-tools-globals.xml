@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:spring="http://www.mulesoft.org/schema/mule/spring"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/mule-apikit
+		http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+		http://www.mulesoft.org/schema/mule/tls
+		http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
+		http://www.mulesoft.org/schema/mule/http
+		http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+		http://www.mulesoft.org/schema/mule/core
+		http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/spring
+		http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd">
+    
+    <http:listener-config name="net-tools-httpListenerConfig">
+        <http:listener-connection
+        	host="0.0.0.0"
+        	port="8081" >
+		</http:listener-connection>
+    </http:listener-config>
+    
+    <apikit:config
+    	name="net-tools-config"
+    	raml="net-tools.raml"
+    	outboundHeadersMapName="outboundHeaders"
+    	httpStatusVarName="httpStatus" />
+	
+	<spring:config
+		name="Spring_Config"
+		doc:name="Spring Config"
+		doc:id="6926b756-2ba1-4a7e-b762-32ecb5b15c3d"
+		files="beans.xml" />
+	
+	<spring:security-manager
+		doc:name="Spring Security manager"
+		doc:id="3de1b709-d798-4de3-a2a1-ef26900fa299" >
+		<spring:delegate-security-provider
+			name="memory-provider"
+			delegate-ref="authenticationManager" />
+	</spring:security-manager>
+</mule>
