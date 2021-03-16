@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:spring="http://www.mulesoft.org/schema/mule/spring"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	
+	<configuration-properties doc:name="Properties Config" file="properties.yaml" />
+		
+	<http:listener-config name="http">
+        <http:listener-connection host="0.0.0.0" port="${httpPort}" />
+    </http:listener-config>
+    
+    <http:listener-config name="https">
+        <http:listener-connection host="0.0.0.0" port="${httpsPort}" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="jceks" path="server.jceks" alias="self-signed-certificate" keyPassword="selfsigned" password="selfsigned" />
+			</tls:context>
+		</http:listener-connection>
+    </http:listener-config>
+    
+    <apikit:config name="net-tools-config" raml="net-tools.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    
+    <spring:config name="Spring_Config" doc:id="45181472-36fd-44e6-b710-296481c3c450" files="beans.xml" />
+	<spring:security-manager>
+		<spring:delegate-security-provider name="memory-provider" delegate-ref="authenticationManager" />
+	</spring:security-manager>
+</mule>
