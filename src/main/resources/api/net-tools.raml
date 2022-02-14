@@ -74,6 +74,10 @@ securitySchemes:
       host:
         description: The the fully qualified domain name the host to test
         type: string
+      dnsServer:
+        description: The DNS server to use for resolution.        
+        type: string
+        required: false
     responses: 
       200:
         body: 

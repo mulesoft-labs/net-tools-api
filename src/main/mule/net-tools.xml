@@ -7,6 +7,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
     <flow name="ui" doc:id="94b97777-bd63-4abb-8093-a5c8ac97aa17" >
 		<http:listener doc:name="Listener" doc:id="7e20b485-577c-4530-b2b1-66b6a84d5694" config-ref="${protocol}" path="/*" outputMimeType="text/html"/>
 		<http:basic-security-filter doc:name="Basic security filter" doc:id="cb77f47e-923a-4195-86fc-23bbf2f01311" realm="mule" />
+		<spring:authorization-filter requiredAuthorities="ROLE_ADMIN" />
 		<ee:transform doc:name="Transform Message" doc:id="610d96e5-97f6-407d-ab81-fa234a5794bc" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -178,7 +179,7 @@ NetworkUtils::curl(attributes.queryParams.url)]]></ee:set-payload>
 output application/java
 import java!com::mulesoft::tool::network::NetworkUtils
 ---
-NetworkUtils::resolveIPs(attributes.queryParams.host, attributes.queryParams.dnsServer)]]></ee:set-payload>
+NetworkUtils::resolveIPs(attributes.queryParams.host, attributes.queryParams.dnsServer default "")]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>

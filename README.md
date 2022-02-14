@@ -25,7 +25,7 @@ The UI can be accessed by using the base URL for the app.  The options are liste
 - CloudHub Shared Load Balancer: `http://{app-name}.{region}.cloudhub.io` where the app-name and region are specific to the deployed app.
 - Dedicated Load Balancer: `custom url`.  See *Configuration* section to update settings.
 
-The API Console is available at the `/api/console` path.
+The API Console is available at the `/console` path.
 
 The UI is protected by Basic Authentication, and the default credentials are listed in the *Configuration* section.
 
