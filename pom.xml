@@ -15,7 +15,7 @@
 
         <app.runtime>4.3.0</app.runtime>
         <mule.maven.plugin.version>3.4.2</mule.maven.plugin.version>
-        <apikit.module.version>1.5.0</apikit.module.version>
+        <apikit.module.version>1.5.8</apikit.module.version>
 		<http.connector.version>1.5.24</http.connector.version>
 		<sockets.connector.version>1.2.1</sockets.connector.version>
 		<spring.module.version>1.3.6</spring.module.version>
