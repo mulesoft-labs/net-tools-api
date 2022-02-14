@@ -1,0 +1,6 @@
+# Default Properties
+user: "vpc-tools"
+pass: "SomePass"
+httpPort: "8081"
+httpsPort: "8082"
+protocol: "http"
