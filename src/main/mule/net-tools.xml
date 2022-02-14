@@ -3,42 +3,45 @@
 http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-    <http:listener-config name="net-tools-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8081" />
-    </http:listener-config>
-    <apikit:config name="net-tools-config" raml="net-tools.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-    	<spring:config name="Spring_Config" doc:id="3b613b3b-3bc8-47ee-897c-e00fe681b775" files="beans.xml" />
-	<spring:security-manager>
-		<spring:delegate-security-provider name="memory-provider" delegate-ref="authenticationManager" />
-	</spring:security-manager>
+    
     <flow name="ui" doc:id="94b97777-bd63-4abb-8093-a5c8ac97aa17" >
-		<http:listener doc:name="Listener" doc:id="7e20b485-577c-4530-b2b1-66b6a84d5694" config-ref="net-tools-httpListenerConfig" path="/*" outputMimeType="text/html"/>
+		<http:listener doc:name="Listener" doc:id="7e20b485-577c-4530-b2b1-66b6a84d5694" config-ref="${protocol}" path="/*" outputMimeType="text/html"/>
 		<http:basic-security-filter doc:name="Basic security filter" doc:id="cb77f47e-923a-4195-86fc-23bbf2f01311" realm="mule" />
-		<ee:transform doc:name="Transform Message" doc:id="f2311504-43c7-4db0-9b0a-a5a4fdd80d90" >
+		<spring:authorization-filter requiredAuthorities="ROLE_ADMIN" />
+		<ee:transform doc:name="Transform Message" doc:id="610d96e5-97f6-407d-ab81-fa234a5794bc" >
 			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+
+var uriPath = attributes.requestPath
+var path = if ("/" == uriPath)
+		"web/index.html"
+	else
+		"web" ++ uriPath
+---
+readUrl("classpath://" ++ path, "text/plain")]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="path" ><![CDATA[%dw 2.0
+				<ee:set-variable variableName="mimeType" ><![CDATA[%dw 2.0
 output application/java
 ---
-attributes.requestPath]]></ee:set-variable>
+splitBy(attributes.requestPath, ".")[-1] default ""]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<scripting:execute engine="groovy" doc:name="Execute" doc:id="d4d71943-f44e-4acb-8678-951dbf1aa6e1">
-			<scripting:code>if (&quot;/&quot;.equals(path)) {
-	org.mule.runtime.core.api.util.IOUtils.getResourceAsString(&quot;web/index.html&quot;, this.getClass());
-} else {
-	org.mule.runtime.core.api.util.IOUtils.getResourceAsString(&quot;web&quot; + path, this.getClass());
-}</scripting:code>
-			<scripting:parameters><![CDATA[#[{path: vars.path}]]]></scripting:parameters>
-		</scripting:execute>
-	</flow>
-    <flow name="ui-css" doc:id="bc50f62f-51f7-4841-955b-014eb52b2976" >
-		<http:listener doc:name="Listener" doc:id="24f59827-51c3-48d1-abce-18d4143f58f3" config-ref="net-tools-httpListenerConfig" path="/css/*" outputMimeType="text/css"/>
-		<flow-ref doc:name="Flow Reference" doc:id="4a35a0d4-31a1-4514-a348-a4eb4d089559" name="ui"/>
+		<choice doc:name="Which MIME type?" doc:id="7fa94994-1832-4b21-b557-691274259e46" >
+			<when expression='#[vars.mimeType == "css"]'>
+				<set-payload value="#[payload]" doc:name="Set MIME type as CSS" doc:id="d8334850-64ab-448a-abe3-1611772f58b8" mimeType="text/css" />
+			</when>
+			<when expression='#[vars.mimeType == "js"]'>
+				<set-payload value="#[payload]" doc:name="Set MIME type as JavaScript" doc:id="9595f13e-4c58-4707-9818-c3bcc1d33a0a" mimeType="application/javascript" />
+			</when>
+			<otherwise >
+				<set-payload value="#[payload]" doc:name="Set MIME type as HTML" doc:id="1e21a771-c190-40db-984f-9805208c3ca2" mimeType="text/html" />
+			</otherwise>
+		</choice>
 	</flow>
 	<flow name="net-tools-main">
-        <http:listener config-ref="net-tools-httpListenerConfig" path="/api/*">
+        <http:listener config-ref="${protocol}" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:response>
@@ -131,7 +134,7 @@ output application/json
         </error-handler>
     </flow>
     <flow name="net-tools-console">
-        <http:listener config-ref="net-tools-httpListenerConfig" path="/console/*">
+        <http:listener config-ref="${protocol}" path="/console/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:response>
@@ -176,7 +179,7 @@ NetworkUtils::curl(attributes.queryParams.url)]]></ee:set-payload>
 output application/java
 import java!com::mulesoft::tool::network::NetworkUtils
 ---
-NetworkUtils::resolveIPs(attributes.queryParams.host, attributes.queryParams.dnsServer)]]></ee:set-payload>
+NetworkUtils::resolveIPs(attributes.queryParams.host, attributes.queryParams.dnsServer default "")]]></ee:set-payload>
             </ee:message>
         </ee:transform>
     </flow>
