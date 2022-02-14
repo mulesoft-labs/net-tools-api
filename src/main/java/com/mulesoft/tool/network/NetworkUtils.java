@@ -20,7 +20,7 @@ public class NetworkUtils {
 	}
 
 	public static String resolveIPs(String host, String dnsServer) throws UnknownHostException {
-		if (dnsServer.equals("default"))
+		if (dnsServer.equals("default") || dnsServer == null || dnsServer.isEmpty())
  		{
 			InetAddress[] addresses = InetAddress.getAllByName(host);
 			StringBuilder sb = new StringBuilder();
@@ -46,6 +46,7 @@ public class NetworkUtils {
 		//-i include protocol headers
 		//-L follow redirects
 		//-k insecure
+		//-E cert status
 		return execute(new ProcessBuilder("curl","-k", "-i","-L", url));
 	}
 
