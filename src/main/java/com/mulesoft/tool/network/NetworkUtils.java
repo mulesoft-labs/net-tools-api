@@ -89,6 +89,10 @@ public class NetworkUtils {
 		return execute(new ProcessBuilder("traceroute", "-w", "3", "-q", "1", "-m", "18", "-n", host));
 	}
 
+	public static String traceRouteWithPort(String host, String port) throws Exception {
+		return execute(new ProcessBuilder("traceroute", "-w", "3", "-q", "1", "-m", "18", "-p", port, "-n", host));
+	}
+
 	public static String certest(String host, String port) throws Exception {
 		return execute(new ProcessBuilder("openssl", "s_client", "-showcerts", "-servername", host, "-connect", host+":"+port));
 	}
