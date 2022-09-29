@@ -140,6 +140,7 @@
                 <select name="operation" id="operation">
                     <option value="ping" selected>Ping</option>
                     <option value="traceroute">Traceroute</option>
+                    <option value="traceroutePort">Traceroute with port</option>
                     <option value="socket">Socket</option>
                     <option value="dns">DNS</option>
                     <option value="curl">curl</option>
@@ -199,6 +200,11 @@
                         $("#ip").show();
                         $("#tracerouteHelp").show();
                         break;
+                      case "traceroutePort":
+                        $("#ip").show();
+                        $("#port").show();
+                        $("#socketHelp").show();
+                        break;
                       case "socket":
                         $("#ip").show();
                         $("#port").show();
@@ -236,14 +242,14 @@
                     var operation = $("#operation").val();
                     var ip = $("#ip").val();
                     var url = (operation === 'curl') ? $("#url").val() : '';
-                    var port = (operation === 'socket' || operation === 'certest' || operation === 'ciphertest') ? $("#port").val() : '';
+                    var port = (operation === 'socket' || operation === 'traceroutePort' || operation === 'certest' || operation === 'ciphertest') ? $("#port").val() : '';
                     var dnsServer = (operation === 'dns') ? $("#dnsServer").val() : '';                    
                     if (operation !== 'curl' && !ip) {
                         toastr["error"]("Missing IP", "Invalid Arguments")
                         console.error("Missing IP!");
                         return;
                     }
-                    if ((operation === 'socket' || operation === 'certest' || operation === 'ciphertest') && !port) {
+                    if ((operation === 'socket' || operation === 'traceroutePort' || operation === 'certest' || operation === 'ciphertest') && !port) {
                         toastr["error"]("Missing port", "Invalid Arguments")
                         console.error('Missing port!');
                         return;
@@ -254,7 +260,7 @@
                         return;
                     }
                     var apiurl = 'api/' + operation + '?host=' + ip;
-                    if (operation === 'socket' || operation === 'certest' || operation === 'ciphertest') {
+                    if (operation === 'socket' || operation === 'traceroutePort' || operation === 'certest' || operation === 'ciphertest') {
                         apiurl += '&port=' + port;
                     }
                     if (operation === 'dns') {
