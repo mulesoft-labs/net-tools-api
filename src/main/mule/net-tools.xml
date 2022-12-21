@@ -5,21 +5,26 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     
     <flow name="ui" doc:id="94b97777-bd63-4abb-8093-a5c8ac97aa17" >
-		<http:listener doc:name="Listener" doc:id="7e20b485-577c-4530-b2b1-66b6a84d5694" config-ref="${protocol}" path="/*" outputMimeType="text/html"/>
+		<http:listener doc:name="Listener" doc:id="7e20b485-577c-4530-b2b1-66b6a84d5694" config-ref="https" path="/*" outputMimeType="text/html"/>
 		<http:basic-security-filter doc:name="Basic security filter" doc:id="cb77f47e-923a-4195-86fc-23bbf2f01311" realm="mule" />
 		<spring:authorization-filter requiredAuthorities="ROLE_ADMIN" />
 		<ee:transform doc:name="Transform Message" doc:id="610d96e5-97f6-407d-ab81-fa234a5794bc" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output text/plain
+import * from dw::core::Strings
 
+var ignore = ["favicon.ico"]
 var uriPath = attributes.requestPath
 var path = if ("/" == uriPath)
 		"web/index.html"
 	else
 		"web" ++ uriPath
 ---
-readUrl("classpath://" ++ path, "text/plain")]]></ee:set-payload>
+if (ignore contains substringAfterLast(uriPath, "/"))
+	null
+else
+	readUrl("classpath://" ++ path, "text/plain")]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
 				<ee:set-variable variableName="mimeType" ><![CDATA[%dw 2.0
@@ -40,8 +45,8 @@ splitBy(attributes.requestPath, ".")[-1] default ""]]></ee:set-variable>
 			</otherwise>
 		</choice>
 	</flow>
-	<flow name="net-tools-main">
-        <http:listener config-ref="${protocol}" path="/api/*">
+	<flow name="net-tools-main" doc:id="6f86a93f-9de9-4cf8-b092-b6a4b23c42f4">
+        <http:listener config-ref="https" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:response>
@@ -128,33 +133,6 @@ output application/json
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">501</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-        </error-handler>
-    </flow>
-    <flow name="net-tools-console">
-        <http:listener config-ref="${protocol}" path="/console/*">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:response>
-            <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:error-response>
-        </http:listener>
-        <apikit:console config-ref="net-tools-config" />
-        <error-handler>
-            <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Resource not found"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>

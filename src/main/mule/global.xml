@@ -31,7 +31,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
     <apikit:config name="net-tools-config" raml="net-tools.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     
     <spring:config name="Spring_Config" doc:id="45181472-36fd-44e6-b710-296481c3c450" files="beans.xml" />
-	<spring:security-manager>
+	<spring:security-manager> 
 		<spring:delegate-security-provider name="memory-provider" delegate-ref="authenticationManager" />
 	</spring:security-manager>
 </mule>
