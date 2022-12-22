@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	
+	<flow name="http-ui" doc:id="26329426-60ba-49ad-ae04-ac3bfb607dea" initialState="${httpListener}">
+		<http:listener doc:name="Listener"
+			doc:id="945b4a80-dcdd-460e-a520-24f510d84be8" config-ref="http"
+			path="/*" outputMimeType="text/html" />
+		<flow-ref doc:name="ui"
+			doc:id="e74273e3-e138-414c-b6bf-58728820b208" name="ui" />
+	</flow>
+
+	<flow name="http-net-tools-main" initialState="${httpListener}">
+		<http:listener config-ref="http" path="/api/*">
+			<http:response
+				statusCode="#[vars.httpStatus default 200]">
+				<http:headers>#[vars.outboundHeaders default {}]</http:headers>
+			</http:response>
+			<http:error-response
+				statusCode="#[vars.httpStatus default 500]">
+				<http:body>#[payload]</http:body>
+				<http:headers>#[vars.outboundHeaders default {}]</http:headers>
+			</http:error-response>
+		</http:listener>
+		<flow-ref doc:name="net-tools-main" doc:id="7b7d5435-a4ae-4c67-9159-cf238285bd32" name="net-tools-main"/>
+	
+</flow>
+</mule>

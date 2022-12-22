@@ -3,4 +3,5 @@ user: "vpc-tools"
 pass: "SomePass"
 httpPort: "8081"
 httpsPort: "8082"
-protocol: "http"
+httpListener: "started"
+ignoreFiles: "favicon.ico" # comma-delimited list of resource files to ignore
