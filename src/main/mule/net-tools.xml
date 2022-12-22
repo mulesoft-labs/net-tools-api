@@ -1,63 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:spring="http://www.mulesoft.org/schema/mule/spring"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
 http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-    
-    <flow name="ui" doc:id="94b97777-bd63-4abb-8093-a5c8ac97aa17" >
-		<http:listener doc:name="Listener" doc:id="7e20b485-577c-4530-b2b1-66b6a84d5694" config-ref="https" path="/*" outputMimeType="text/html"/>
-		<http:basic-security-filter doc:name="Basic security filter" doc:id="cb77f47e-923a-4195-86fc-23bbf2f01311" realm="mule" />
-		<spring:authorization-filter requiredAuthorities="ROLE_ADMIN" />
-		<ee:transform doc:name="Transform Message" doc:id="610d96e5-97f6-407d-ab81-fa234a5794bc" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output text/plain
-import substringAfterLast from dw::core::Strings
 
-var ignoreFiles = p("ignoreFiles") splitBy ","
-var uriPath = attributes.requestPath
-var path = if ("/" == uriPath)
-		"web/index.html"
-	else
-		"web" ++ uriPath
----
-if (ignoreFiles contains substringAfterLast(uriPath, "/"))
-	null
-else
-	readUrl("classpath://" ++ path, "text/plain")]]></ee:set-payload>
+	<flow name="ui" doc:id="94b97777-bd63-4abb-8093-a5c8ac97aa17">
+		<http:listener doc:name="Listener"
+			doc:id="7e20b485-577c-4530-b2b1-66b6a84d5694" config-ref="https"
+			path="/*" outputMimeType="text/html" />
+		<http:basic-security-filter
+			doc:name="Basic security filter"
+			doc:id="cb77f47e-923a-4195-86fc-23bbf2f01311" realm="mule" />
+		<spring:authorization-filter
+			requiredAuthorities="ROLE_ADMIN" />
+		<ee:transform doc:name="Transform Message"
+			doc:id="610d96e5-97f6-407d-ab81-fa234a5794bc">
+			<ee:message>
+				<ee:set-payload
+					resource="dwl/setWebResourcePayload.dwl" />
 			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="mimeType" ><![CDATA[%dw 2.0
-output application/java
-import substringAfterLast from dw::core::Strings
----
-substringAfterLast(attributes.requestPath, ".") default ""]]></ee:set-variable>
+			<ee:variables>
+				<ee:set-variable
+					resource="dwl/setWebResourceMimeType.dwl" variableName="mimeType" />
 			</ee:variables>
 		</ee:transform>
-		<choice doc:name="Which MIME type?" doc:id="7fa94994-1832-4b21-b557-691274259e46" >
+		<choice doc:name="Which MIME type?"
+			doc:id="7fa94994-1832-4b21-b557-691274259e46">
 			<when expression='#[vars.mimeType == "css"]'>
-				<set-payload value="#[payload]" doc:name="Set MIME type as CSS" doc:id="d8334850-64ab-448a-abe3-1611772f58b8" mimeType="text/css" />
+				<set-payload value="#[payload]"
+					doc:name="Set MIME type as CSS"
+					doc:id="d8334850-64ab-448a-abe3-1611772f58b8" mimeType="text/css" />
 			</when>
 			<when expression='#[vars.mimeType == "js"]'>
-				<set-payload value="#[payload]" doc:name="Set MIME type as JavaScript" doc:id="9595f13e-4c58-4707-9818-c3bcc1d33a0a" mimeType="application/javascript" />
+				<set-payload value="#[payload]"
+					doc:name="Set MIME type as JavaScript"
+					doc:id="9595f13e-4c58-4707-9818-c3bcc1d33a0a"
+					mimeType="application/javascript" />
 			</when>
-			<otherwise >
-				<set-payload value="#[payload]" doc:name="Set MIME type as HTML" doc:id="1e21a771-c190-40db-984f-9805208c3ca2" mimeType="text/html" />
+			<otherwise>
+				<set-payload value="#[payload]"
+					doc:name="Set MIME type as HTML"
+					doc:id="1e21a771-c190-40db-984f-9805208c3ca2" mimeType="text/html" />
 			</otherwise>
 		</choice>
 	</flow>
-	<flow name="net-tools-main" doc:id="6f86a93f-9de9-4cf8-b092-b6a4b23c42f4">
-        <http:listener config-ref="https" path="/api/*">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:response>
-            <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:error-response>
-        </http:listener>
+	<flow name="net-tools-main"
+		doc:id="6f86a93f-9de9-4cf8-b092-b6a4b23c42f4">
+		<http:listener config-ref="https" path="/api/*">
+			<http:response
+				statusCode="#[vars.httpStatus default 200]">
+				<http:headers>#[vars.outboundHeaders default {}]</http:headers>
+			</http:response>
+			<http:error-response
+				statusCode="#[vars.httpStatus default 500]">
+				<http:body>#[payload]</http:body>
+				<http:headers>#[vars.outboundHeaders default {}]</http:headers>
+			</http:error-response>
+		</http:listener>
 		<http:basic-security-filter doc:name="Basic security filter" realm="mule" />
-        <apikit:router config-ref="net-tools-config" />
+		<logger level="INFO"
+			message='#["$(attributes.scheme default "") $(attributes.method default "") $(attributes.requestUri default "")"]'
+			doc:name="Log Endpoint" />
+		<apikit:router config-ref="net-tools-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -140,7 +152,6 @@ output application/json
         </error-handler>
     </flow>
 	<flow name="get:\curl:net-tools-config">
-        <logger level="INFO" message="get:\curl:net-tools-config" />
 		<ee:transform doc:name="Transform Message" doc:id="c96eaddb-f56e-4f1a-81ff-ec15df7cb6d6" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
