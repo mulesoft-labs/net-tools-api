@@ -12,16 +12,16 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output text/plain
-import * from dw::core::Strings
+import substringAfterLast from dw::core::Strings
 
-var ignore = ["favicon.ico"]
+var ignoreFiles = p("ignoreFiles") splitBy ","
 var uriPath = attributes.requestPath
 var path = if ("/" == uriPath)
 		"web/index.html"
 	else
 		"web" ++ uriPath
 ---
-if (ignore contains substringAfterLast(uriPath, "/"))
+if (ignoreFiles contains substringAfterLast(uriPath, "/"))
 	null
 else
 	readUrl("classpath://" ++ path, "text/plain")]]></ee:set-payload>
@@ -29,8 +29,9 @@ else
 			<ee:variables >
 				<ee:set-variable variableName="mimeType" ><![CDATA[%dw 2.0
 output application/java
+import substringAfterLast from dw::core::Strings
 ---
-splitBy(attributes.requestPath, ".")[-1] default ""]]></ee:set-variable>
+substringAfterLast(attributes.requestPath, ".") default ""]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<choice doc:name="Which MIME type?" doc:id="7fa94994-1832-4b21-b557-691274259e46" >
