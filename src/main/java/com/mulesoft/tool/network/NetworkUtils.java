@@ -8,7 +8,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
@@ -42,12 +43,22 @@ public class NetworkUtils {
 		}
 	}
 
-	public static String curl(String url) throws IOException {
+	public static String curl(String url, String[] headers) throws IOException {
 		//-i include protocol headers
 		//-L follow redirects
 		//-k insecure
 		//-E cert status
-		return execute(new ProcessBuilder("curl","-k", "-i","-L", url));
+		List<String> command = new ArrayList<String>();
+		command.add("curl");
+		command.add("-k");
+		command.add("-i");
+		command.add("-L");
+		command.add(url);
+		for (String header : headers ) {
+			command.add("-H");
+			command.add(header);
+		}		
+		return execute(new ProcessBuilder(command));
 	}
 
 	public static String testConnect(String host, String port) {
