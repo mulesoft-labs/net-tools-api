@@ -43,14 +43,14 @@ public class NetworkUtils {
 		}
 	}
 
-	public static String curl(String url, String[] headers) throws IOException {
+	public static String curl(String url, String[] headers, Boolean insecure) throws IOException {
 		//-i include protocol headers
 		//-L follow redirects
 		//-k insecure
 		//-E cert status
 		List<String> command = new ArrayList<String>();
 		command.add("curl");
-		command.add("-k");
+		if(insecure) command.add("-k");
 		command.add("-i");
 		command.add("-L");
 		command.add(url);

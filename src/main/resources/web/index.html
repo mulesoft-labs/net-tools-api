@@ -149,6 +149,7 @@
                 <input name="ip" placeholder="IP Address or Host" type="text" title="IP" id="ip" />
                 <input name="port" placeholder="Port" type="text" title="PORT" id="port" />
                 <input name="url" placeholder="http://host:port/path/" type="text" title="URL" id="url" />
+                <input name="insecure" type="checkbox" title="insecure" id="insecure" checked="true" /><span class="helpBox" id="insecure_label">insecure</span>
                 <textarea name="header" placeholder="header-name:header-value" title="Header" id="header" rows="3" cols="50" style="display: block"></textarea>
                 <input name="dnsServer" placeholder="dns server" type="text" title="DNS SERVER" id="dnsServer" />
                 <button type="button" id="check">Run</button>
@@ -226,6 +227,8 @@
                         $("#url").show();
                         $("#curlHelp").show();
                         $("#header").show();
+                        $("#insecure").show();
+                        $("#insecure_label").show();
                         break;
                     default:
 
@@ -266,6 +269,7 @@
                     }
                     if (operation === 'curl') {
                         apiurl += '&url=' + encodeURI(url);
+                        apiurl += '&insecure=' + $("#insecure").prop('checked');
                         for (let h of $("#header").val().split('\n')) {
                         	apiurl += '&header=' + encodeURI(h);
                         }

@@ -158,7 +158,7 @@ output application/json
 output application/java
 import java!com::mulesoft::tool::network::NetworkUtils
 ---
-NetworkUtils::curl(attributes.queryParams.url, attributes.queryParams.*header default [])]]></ee:set-payload>
+NetworkUtils::curl(attributes.queryParams.url, attributes.queryParams.*header default [], attributes.queryParams.insecure as Boolean)]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
     </flow>
