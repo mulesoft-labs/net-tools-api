@@ -21,7 +21,7 @@
 		<spring.module.version>1.3.7</spring.module.version>
 
 		<spring.version>5.3.22</spring.version>
-		<spring-security.version>5.7.5</spring-security.version>
+		<spring-security.version>5.7.8</spring-security.version>
 	</properties>
 
 	<build>
