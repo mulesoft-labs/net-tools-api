@@ -149,6 +149,8 @@
                 <input name="ip" placeholder="IP Address or Host" type="text" title="IP" id="ip" />
                 <input name="port" placeholder="Port" type="text" title="PORT" id="port" />
                 <input name="url" placeholder="http://host:port/path/" type="text" title="URL" id="url" />
+                <input name="insecure" type="checkbox" title="insecure" id="insecure" checked="true" /><span class="helpBox" id="insecure_label">insecure</span>
+                <textarea name="header" placeholder="header-name:header-value" title="Header" id="header" rows="3" cols="50" style="display: block"></textarea>
                 <input name="dnsServer" placeholder="dns server" type="text" title="DNS SERVER" id="dnsServer" />
                 <button type="button" id="check">Run</button>
                 <button type="button" id="clean">Clean Console</button>
@@ -159,7 +161,7 @@
 			  <div class="helpBox" id="tracerouteHelp" style="display: none;">Set an IP Address or Hostname and hit Run</div>	
               <div class="helpBox" id="socketHelp" style="display: none;">Set an IP Address or Hostname, the Port and hit Run</div>	
 			  <div class="helpBox" id="dnsHelp" style="display: none;">Set a Hostname and hit Run</div>	
-			  <div class="helpBox" id="curlHelp" style="display: none;">Set an IP Address or Schema (http-https://) plus Hostname, the Port, the Path and hit Run</div>	
+			  <div class="helpBox" id="curlHelp" style="display: none;">Set an IP Address or Schema (http-https://) plus Hostname, the Port, the Path, the Headers (multi-line) and hit Run</div>	
 			</div>
             <pre id="output">
             </pre>
@@ -188,6 +190,8 @@
                     var operation = e.target.value;
                     var inputs = $("#theForm input").removeClass();
                     inputs.hide();
+                    var textareas = $("#theForm textarea").removeClass();
+                    textareas.hide();
                     var helps = $(".helpBox");
                     helps.hide();
                     switch (operation) {
@@ -222,6 +226,9 @@
                       case "curl":
                         $("#url").show();
                         $("#curlHelp").show();
+                        $("#header").show();
+                        $("#insecure").show();
+                        $("#insecure_label").show();
                         break;
                     default:
 
@@ -262,6 +269,10 @@
                     }
                     if (operation === 'curl') {
                         apiurl += '&url=' + encodeURI(url);
+                        apiurl += '&insecure=' + $("#insecure").prop('checked');
+                        for (let h of $("#header").val().split('\n')) {
+                        	apiurl += '&header=' + encodeURI(h);
+                        }
                     }
                     console.log(operation + " " + ip + " " + port + " " + url );
                     $("#check").attr("disabled", true);

@@ -91,6 +91,12 @@ securitySchemes:
       url:
         description: Target URL
         type: string 
+      header:
+        required: false
+        items:
+          type: string
+          example: |
+            Authorization:Basic YQxhZGRpbjpvcGVuc2VzYW1l
     responses: 
       200:
         body: 
