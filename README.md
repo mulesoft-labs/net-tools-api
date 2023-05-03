@@ -44,7 +44,13 @@ The properties below can be set on the app to override the default settings.  Th
 - When using CloudHub 2.0 and RTF, you must enable *Last-Mile Security* in the app's Ingress tab if you want to use HTTPS.
 - This does not use `http.port` and `https.port` properties since those are overrriden on Cloudhub 2.0 and RTF to the same port and will prevent the app from starting because of a port conflict.
 
-### References
+# References
 - [CloudHub 2.0 Infrastructure Considerations](https://docs.mulesoft.com/cloudhub-2/ch2-comparison#infrastructure-considerations)
 - [CloudHub 1.0 Load Balancer Architecture](https://docs.mulesoft.com/cloudhub-1/lb-architecture)
 - [Enable Last Mile Security in RTF](https://help.mulesoft.com/s/article/How-to-Enable-both-Last-Mile-Security-and-Mutual-TLS-in-Runtime-Fabric)
+
+# Maintenance
+This uses the JS libraries below.
+- jQuery 1.11.3 [min](https://code.jquery.com/jquery-1.11.3.min.js) and [map](https://code.jquery.com/jquery-1.11.3.min.map).
+- [Toastr](https://github.com/CodeSeven/toastr) 2.1.4 [min, map, and css](https://cdnjs.com/libraries/toastr.js).
+
