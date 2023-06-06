@@ -4,7 +4,7 @@
 
 	<groupId>com.mycompany</groupId>
 	<artifactId>net-tools-api</artifactId>
-	<version>2.5.1</version>
+	<version>2.5.2-SNAPSHOT</version>
 	<packaging>mule-application</packaging>
 
 	<name>net-tools-api</name>
@@ -14,7 +14,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<app.runtime>4.4.0</app.runtime>
-		<mule.maven.plugin.version>3.8.0</mule.maven.plugin.version>
+		<mule.maven.plugin.version>3.8.2</mule.maven.plugin.version>
 		<apikit.module.version>1.8.0</apikit.module.version>
 		<http.connector.version>1.7.3</http.connector.version>
 		<sockets.connector.version>1.2.3</sockets.connector.version>
